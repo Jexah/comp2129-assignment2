@@ -59,7 +59,61 @@ void print_help_string(void)
 entry* entry_head = NULL;
 snapshot* snapshot_head = NULL;
 
+entry *find_entry_by_key(char *key_ptr)
+{
+	entry *cursor_ptr = entry_head
+	while(cursor_ptr)
+	{
+		if(strcmp(cursor_ptr->key, key_ptr) == 0)
+		{
+			return cursor_ptr;
+		}
+		cursor_ptr = cursor_ptr->next;
+	}
+	return 0;
+}
 
+void set_entry_values_by_key(char *key, char *values)
+{
+	delete_entry_values_by_key(key);
+	append_entry_values_by_key(key, values);
+}
+
+void append_entry_values_by_key(char *key, char *values)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		entry_ptr = malloc(sizeof(entry));
+		append_entry_to_entries(entry_ptr, entry_head);
+	}
+	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values, ' ')) || (values = strchr(values, '\n')));
+	printf("success append values");
+}
+
+void delete_entry_values_by_key(char *key)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		printf("key does not exist");
+		return;
+	}
+	delete_entry_values(entry_ptr);
+	printf("success delete entry values")
+}
+
+void delete_entry_by_key(char *key)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		printf("key does not exist");
+		return;
+	}
+	delete_entry(entry_ptr);
+	printf("success delete entry")
+}
 
 int main(void) {
 
@@ -77,13 +131,13 @@ int main(void) {
 		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
 
 
-		if(strcmp(command->args_malloc_ptr[0], "help") == 0)
-		{
-			print_help_string();
-		}
-		else if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
+		if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
 
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "help") == 0)
+		{
+			print_help_string();
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "list") == 0)
 		{
@@ -96,7 +150,7 @@ int main(void) {
 				}
 				else
 				{
-					printf("no entries");
+					printf("no keys");
 				}
 			}
 			else if(strcmp(command->args_malloc_ptr[1], "entries") == 0)
@@ -126,9 +180,25 @@ int main(void) {
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "append") == 0)
+		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
+		{
+			delete_entry_values_by_key(command->args_malloc_ptr[1]);
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "purge") == 0)
 		{
 
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "set") == 0)
+		{
+			set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2]);
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "push") == 0)
+		{
+
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "append") == 0)
+		{
+			append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2]);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pick") == 0)
 		{
@@ -143,6 +213,10 @@ int main(void) {
 
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "drop") == 0)
+		{
+
+		}
+		else if(strcmp(command->args_malloc_ptr[0], "rollback") == 0)
 		{
 
 		}
