@@ -62,80 +62,81 @@ int main(void) {
 		struct command_struct *command = get_command_struct(buffer);
 		if(!command) continue;
 
-		if(command->args_malloc_ptr[0]) printf("Arg1: %s\n", command->args_malloc_ptr[0]);
+		if(command->args_malloc_ptr[0]) printf("Arg1: '%s'\n", command->args_malloc_ptr[0]);
+		if(command->args_malloc_ptr[0]) printf("Arg1: 'help'\n");
 		if(command->args_malloc_ptr[1]) printf("Arg2: %s\n", command->args_malloc_ptr[1]);
 		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
 
 
-		if(strcmp(command->args_malloc_ptr[0], "help"))
+		if(strcmp(command->args_malloc_ptr[0], "help") == 0)
 		{
 			print_help_string();
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "bye"))
+		else if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "list"))
+		else if(strcmp(command->args_malloc_ptr[0], "list") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "get"))
+		else if(strcmp(command->args_malloc_ptr[0], "get") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "append"))
+		else if(strcmp(command->args_malloc_ptr[0], "append") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "pick"))
+		else if(strcmp(command->args_malloc_ptr[0], "pick") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "pluck"))
+		else if(strcmp(command->args_malloc_ptr[0], "pluck") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "pop"))
+		else if(strcmp(command->args_malloc_ptr[0], "pop") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "drop"))
+		else if(strcmp(command->args_malloc_ptr[0], "drop") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "checkout"))
+		else if(strcmp(command->args_malloc_ptr[0], "checkout") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "snapshot"))
+		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "min"))
+		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "max"))
+		else if(strcmp(command->args_malloc_ptr[0], "max") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "sum"))
+		else if(strcmp(command->args_malloc_ptr[0], "sum") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "len"))
+		else if(strcmp(command->args_malloc_ptr[0], "len") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "rev"))
+		else if(strcmp(command->args_malloc_ptr[0], "rev") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "uniq"))
+		else if(strcmp(command->args_malloc_ptr[0], "uniq") == 0)
 		{
 
 		}
-		else if(strcmp(command->args_malloc_ptr[0], "sort"))
+		else if(strcmp(command->args_malloc_ptr[0], "sort") == 0)
 		{
 
 		}
