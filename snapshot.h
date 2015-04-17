@@ -111,7 +111,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	if(!entry_ptr)
 	{
 		entry_ptr = malloc(sizeof(entry));
-		append_entry_to_entries(entry_ptr, entry_head);
+		append_entry_to_entry_head(entry_ptr, entry_head);
 	}
 	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values, ' ')) || (values = strchr(values, '\n')));
 	printf("success append values");
