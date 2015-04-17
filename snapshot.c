@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+void str_tolower(char *str)
+{
+	for(int i = 0; str[i]; ++i){
+		str[i] = tolower(str[i]);
+	}
+}
+
+
 #include "snapshot.h"
 
 #include "command.c"
@@ -43,13 +52,6 @@ void print_help_string(void)
 		"UNIQ <key> removes repeated adjacent entry values\n"\
 		"SORT <key> sorts entry values in ascending order\n"
 	);
-}
-
-void str_tolower(char *str)
-{
-	for(int i = 0; str[i]; ++i){
-		str[i] = tolower(str[i]);
-	}
 }
 
 // most recently added
