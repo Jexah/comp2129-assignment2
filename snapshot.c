@@ -45,6 +45,8 @@ void print_help_string(void)
 	);
 }
 
+
+
 // most recently added
 entry* entry_head = NULL;
 snapshot* snapshot_head = NULL;
@@ -63,7 +65,6 @@ int main(void) {
 		if(!command) continue;
 
 		if(command->args_malloc_ptr[0]) printf("Arg1: '%s'\n", command->args_malloc_ptr[0]);
-		if(command->args_malloc_ptr[0]) printf("Arg1: 'help'\n");
 		if(command->args_malloc_ptr[1]) printf("Arg2: %s\n", command->args_malloc_ptr[1]);
 		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
 
@@ -139,6 +140,11 @@ int main(void) {
 		else if(strcmp(command->args_malloc_ptr[0], "sort") == 0)
 		{
 
+		}
+		for(int i = 0; i < 3; ++i)
+		{
+			free(command->args_malloc_ptr[i]);
+			free(command);
 		}
 	}
 
