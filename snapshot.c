@@ -144,7 +144,6 @@ int main(void) {
 		for(int i = 0; i < 3; ++i)
 		{
 			free(command->args_malloc_ptr[i]);
-			free(command);
 		}
 	}
 
