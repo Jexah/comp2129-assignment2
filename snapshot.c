@@ -62,11 +62,15 @@ int main(void) {
 		struct command_struct *command = get_command_struct(buffer);
 		if(!command) continue;
 		char command_string[strlen(command->args_malloc_ptr[0])];
-		if(command_string) printf("Arg1: %s\n", command_string);
+
+		if(command->args_malloc_ptr[0])
+		{
+			strcpy(command_string, command->args_malloc_ptr[0]);
+			printf("Arg1: %s\n", command_string);
+		}
 		if(command->args_malloc_ptr[1]) printf("Arg2: %s\n", command->args_malloc_ptr[1]);
 		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
 
-		strcpy(command_string, command->args_malloc_ptr[0]);
 
 		if(strcmp(command_string, "help"))
 		{
