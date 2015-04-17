@@ -77,7 +77,7 @@ void delete_entry(entry *target_entry)
 void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
     entry *cursor = entry_head_ptr;
-	while(cursor->next)
+    while(cursor && cursor->next)
 	{
         cursor = cursor->next;
 	}
