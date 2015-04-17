@@ -15,7 +15,7 @@ static char *get_arg_from_pointer_malloc_ptr(char *start_ptr)
 
 static char *get_long_arg_from_pointer_malloc_ptr(char *start_ptr)
 {
-	char *return_malloc_ptr = calloc((strchr(start_ptr, ' ') - start_ptr) + 1, 1);
+	char *return_malloc_ptr = calloc((strchr(start_ptr, '\n') - start_ptr) + 1, 1);
 	char *rolling_ptr = return_malloc_ptr;
 	while(*start_ptr != '\n' && (*rolling_ptr++ = *start_ptr++));
 	return return_malloc_ptr;
