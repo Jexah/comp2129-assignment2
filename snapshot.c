@@ -45,7 +45,12 @@ void print_help_string(void)
 	);
 }
 
-
+void str_tolower(char *str)
+{
+	for(int i = 0; str[i]; ++i){
+		str[i] = tolower(str[i]);
+	}
+}
 
 // most recently added
 entry* entry_head = NULL;
@@ -79,7 +84,28 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "list") == 0)
 		{
-
+			str_tolower(command->args_malloc_ptr[1]);
+			if(strcmp(command->args_malloc_ptr[1], "keys"))
+			{
+				if(!entry_head && !entry_head->values)
+				{
+					printf("no entries");
+				}
+			}
+			else if(strcmp(command->args_malloc_ptr[1], "entries"))
+			{
+				if(!entry_head)
+				{
+					printf("no entries");
+				}
+			}
+			else if(strcmp(command->args_malloc_ptr[1], "snapshots"))
+			{
+				if(!snapshot_head)
+				{
+					printf("no snapshots");
+				}
+			}
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "get") == 0)
 		{
