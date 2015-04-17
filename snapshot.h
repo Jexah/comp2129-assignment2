@@ -52,10 +52,10 @@ void append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
     new_value_ptr->prev = cursor;
 }
 
-void append_int_to_entry(int value, entry *entry_ptr)
+void append_int_to_entry(int number, entry *entry_ptr)
 {
     value *new_value_ptr = malloc(sizeof(value));
-    new_value_ptr->value = value;
+    new_value_ptr->value = number;
     append_value_to_entry(new_value_ptr, entry_ptr);
 }
 
