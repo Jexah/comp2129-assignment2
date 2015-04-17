@@ -63,6 +63,8 @@ int main(void) {
 		if(!command) continue;
 		char command_string[strlen(command->args_malloc_ptr[0])];
 		int yolo = strlen(command->args_malloc_ptr[0]);
+		printf("%d", yolo);
+
 		if(command->args_malloc_ptr[0])
 		{
 			strcpy(command_string, command->args_malloc_ptr[0]);
