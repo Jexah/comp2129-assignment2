@@ -90,21 +90,33 @@ int main(void) {
 			str_tolower(command->args_malloc_ptr[1]);
 			if(strcmp(command->args_malloc_ptr[1], "keys"))
 			{
-				if(!entry_head && !entry_head->values)
+				if(entry_head && entry_head->values)
+				{
+
+				}
+				else
 				{
 					printf("no entries");
 				}
 			}
 			else if(strcmp(command->args_malloc_ptr[1], "entries"))
 			{
-				if(!entry_head)
+				if(entry_head)
+				{
+
+				}
+				else
 				{
 					printf("no entries");
 				}
 			}
 			else if(strcmp(command->args_malloc_ptr[1], "snapshots"))
 			{
-				if(!snapshot_head)
+				if(snapshot_head)
+				{
+
+				}
+				else
 				{
 					printf("no snapshots");
 				}
