@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
-struct list_element
+typedef struct list_element
 {
 	void *value;
 	struct list_element *next;
