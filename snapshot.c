@@ -62,7 +62,7 @@ int main(void) {
 		struct command_struct *command = get_command_struct(buffer);
 		if(!command) continue;
 		char command_string[strlen(command->args_malloc_ptr[0])];
-		int yolo = strlen(command->args_malloc_ptr);
+		int yolo = strlen(command->args_malloc_ptr[0]);
 		if(command->args_malloc_ptr[0])
 		{
 			strcpy(command_string, command->args_malloc_ptr[0]);
