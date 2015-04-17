@@ -7,7 +7,7 @@
 #include "command.c"
 #include "list.c"
 
-void print_help_string()
+void print_help_string(void)
 {
 	printf(\
 		"BYE clear database and exit\n"\
@@ -61,14 +61,13 @@ int main(void) {
 	{
 		struct command_struct *command = get_command_struct(buffer);
 		if(!command) continue;
-		char command_string[strlen(command->args_malloc_ptr[0])];
-		int yolo = strlen(command->args_malloc_ptr[0]);
-		printf("%d", yolo);
+		char command_string[strlen(command->args_malloc_ptr[0])] = {0};
 
 		if(command->args_malloc_ptr[0])
 		{
 			strcpy(command_string, command->args_malloc_ptr[0]);
 			printf("Arg1: %s\n", command_string);
+			printf("Arg1: %s\n", command->args_malloc_ptr[0]);
 		}
 		if(command->args_malloc_ptr[1]) printf("Arg2: %s\n", command->args_malloc_ptr[1]);
 		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
