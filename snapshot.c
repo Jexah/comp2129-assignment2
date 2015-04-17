@@ -100,7 +100,7 @@ void delete_entry_values_by_key(char *key)
 		return;
 	}
 	delete_entry_values(entry_ptr);
-	printf("success delete entry values")
+	printf("success delete entry values");
 }
 
 void delete_entry_by_key(char *key)
@@ -112,7 +112,7 @@ void delete_entry_by_key(char *key)
 		return;
 	}
 	delete_entry(entry_ptr);
-	printf("success delete entry")
+	printf("success delete entry");
 }
 
 int main(void) {
