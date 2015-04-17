@@ -32,7 +32,7 @@ void append_value_to_entry(value *, entry *);
 void append_int_to_entry(int , entry *);
 void delete_entry_values(entry *);
 void delete_entry(entry *);
-void append_entry_to_entry_head(value *, entry *, entry *);
+void append_entry_to_entry_head(value *, entry *);
 entry *find_entry_by_key(char *, entry *);
 void set_entry_values_by_key(char *, char *, entry *);
 void append_entry_values_by_key(char *, char *, entry *);
@@ -87,7 +87,7 @@ void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 
 entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 {
-	entry *cursor_ptr = entry_head
+	entry *cursor_ptr = entry_head;
 	while(cursor_ptr)
 	{
 		if(strcmp(cursor_ptr->key, key_ptr) == 0)
@@ -99,10 +99,10 @@ entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 	return 0;
 }
 
-void set_entry_values_by_key(char *key, char *values)
+void set_entry_values_by_key(char *key, char *values, entry *entry_head)
 {
-	delete_entry_values_by_key(key);
-	append_entry_values_by_key(key, values);
+	delete_entry_values_by_key(key, entry_head);
+	append_entry_values_by_key(key, values, entry_head);
 }
 
 void append_entry_values_by_key(char *key, char *values, entry *entry_head)
