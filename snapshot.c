@@ -145,6 +145,7 @@ int main(void) {
 		{
 			free(command->args_malloc_ptr[i]);
 		}
+		free(command);
 	}
 
 	return 0;
