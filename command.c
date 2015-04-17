@@ -58,6 +58,9 @@ struct command_struct *get_command_struct(char *input_ptr)
 	struct command_struct *malloc_ptr = calloc(sizeof(struct command_struct), 1);
 	int num_args = get_num_args(input_ptr);
 	if(num_args >= 1) malloc_ptr->args_malloc_ptr[0] = get_arg_malloc_ptr(input_ptr, 0);
+	for(int i = 0; malloc_ptr->args_malloc_ptr[i]; i++){
+		malloc_ptr->args_malloc_ptr[i] = tolower(malloc_ptr->args_malloc_ptr[i]);
+	}
 	if(num_args >= 2) malloc_ptr->args_malloc_ptr[1] = get_arg_malloc_ptr(input_ptr, 1);
 	if(num_args >= 3) malloc_ptr->args_malloc_ptr[2] = get_long_arg_malloc_ptr(input_ptr, 2);
 	return malloc_ptr;
