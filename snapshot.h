@@ -28,6 +28,19 @@ struct snapshot {
   int id;
 };
 
+void append_value_to_entry(value *, entry *);
+void append_int_to_entry(int , entry *);
+void delete_entry_values(entry *);
+void delete_entry(entry *);
+void append_entry_to_entry_head(value *, entry *);
+entry *find_entry_by_key(char *);
+void set_entry_values_by_key(char *, char *);
+void append_entry_values_by_key(char *, char *);
+void delete_entry_values_by_key(char *);
+void delete_entry_by_key(char *);
+
+
+
 void append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 {
     value *cursor = entry_ptr->values;
@@ -70,6 +83,62 @@ void append_entry_to_entry_head(value *new_entry_ptr, entry *entry_head_ptr)
 	}
     cursor->next = new_entry_ptr;
     new_entry_ptr->prev = cursor;
+}
+
+entry *find_entry_by_key(char *key_ptr)
+{
+	entry *cursor_ptr = entry_head
+	while(cursor_ptr)
+	{
+		if(strcmp(cursor_ptr->key, key_ptr) == 0)
+		{
+			return cursor_ptr;
+		}
+		cursor_ptr = cursor_ptr->next;
+	}
+	return 0;
+}
+
+void set_entry_values_by_key(char *key, char *values)
+{
+	delete_entry_values_by_key(key);
+	append_entry_values_by_key(key, values);
+}
+
+void append_entry_values_by_key(char *key, char *values)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		entry_ptr = malloc(sizeof(entry));
+		append_entry_to_entries(entry_ptr, entry_head);
+	}
+	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values, ' ')) || (values = strchr(values, '\n')));
+	printf("success append values");
+}
+
+void delete_entry_values_by_key(char *key)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		printf("key does not exist");
+		return;
+	}
+	delete_entry_values(entry_ptr);
+	printf("success delete entry values");
+}
+
+void delete_entry_by_key(char *key)
+{
+	entry *entry_ptr = find_entry_by_key(key);
+	if(!entry_ptr)
+	{
+		printf("key does not exist");
+		return;
+	}
+	delete_entry(entry_ptr);
+	printf("success delete entry");
 }
 
 #endif
