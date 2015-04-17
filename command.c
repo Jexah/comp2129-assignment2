@@ -6,7 +6,7 @@
 static char *get_arg_from_pointer_malloc_ptr(char *start_ptr)
 {
 	char *first_space = strchr(start_ptr, ' ');
-	char *return_ptr = calloc(((first_space ? first_space : strchr(start_ptr, '\n')) - start_ptr) + 1 , 1)
+	char *return_ptr = calloc(((first_space ? first_space : strchr(start_ptr, '\n')) - start_ptr) + 1 , 1);
 	char *rolling_ptr = return_ptr;
 	while(*start_ptr != ' ' && *start_ptr != '\n' && (*rolling_ptr++ = *start_ptr++));
 	return return_ptr;
