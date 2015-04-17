@@ -128,7 +128,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
 		{
-			delete_entry_values_by_key(command->args_malloc_ptr[1]);
+			delete_entry_values_by_key(command->args_malloc_ptr[1], entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "purge") == 0)
 		{
@@ -136,7 +136,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "set") == 0)
 		{
-			set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2]);
+			set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "push") == 0)
 		{
@@ -144,7 +144,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "append") == 0)
 		{
-			append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2]);
+			append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pick") == 0)
 		{

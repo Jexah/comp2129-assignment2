@@ -33,11 +33,11 @@ void append_int_to_entry(int , entry *);
 void delete_entry_values(entry *);
 void delete_entry(entry *);
 void append_entry_to_entry_head(value *, entry *);
-entry *find_entry_by_key(char *);
-void set_entry_values_by_key(char *, char *);
-void append_entry_values_by_key(char *, char *);
-void delete_entry_values_by_key(char *);
-void delete_entry_by_key(char *);
+entry *find_entry_by_key(char *, entry *);
+void set_entry_values_by_key(char *, char *, entry *);
+void append_entry_values_by_key(char *, char *, entry *);
+void delete_entry_values_by_key(char *, entry *);
+void delete_entry_by_key(char *, entry *);
 
 
 
@@ -62,7 +62,7 @@ void append_int_to_entry(int number, entry *entry_ptr)
 void delete_entry_values(entry *target_entry)
 {
 	value *cursor = target_entry->values->next;
-	while(free(cursor->prev), cursor = cursor->next);
+	while(free(cursor->prev), (cursor = cursor->next));
     target_entry->values = 0;
 }
 
@@ -74,7 +74,7 @@ void delete_entry(entry *target_entry)
     free(target_entry);
 }
 
-void append_entry_to_entry_head(value *new_entry_ptr, entry *entry_head_ptr)
+void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
     entry *cursor = entry_head_ptr;
 	while(cursor->next)
@@ -85,7 +85,7 @@ void append_entry_to_entry_head(value *new_entry_ptr, entry *entry_head_ptr)
     new_entry_ptr->prev = cursor;
 }
 
-entry *find_entry_by_key(char *key_ptr)
+entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 {
 	entry *cursor_ptr = entry_head
 	while(cursor_ptr)
@@ -105,9 +105,9 @@ void set_entry_values_by_key(char *key, char *values)
 	append_entry_values_by_key(key, values);
 }
 
-void append_entry_values_by_key(char *key, char *values)
+void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 {
-	entry *entry_ptr = find_entry_by_key(key);
+	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
 		entry_ptr = malloc(sizeof(entry));
@@ -117,9 +117,9 @@ void append_entry_values_by_key(char *key, char *values)
 	printf("success append values");
 }
 
-void delete_entry_values_by_key(char *key)
+void delete_entry_values_by_key(char *key, entry *entry_head)
 {
-	entry *entry_ptr = find_entry_by_key(key);
+	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
 		printf("key does not exist");
@@ -129,9 +129,9 @@ void delete_entry_values_by_key(char *key)
 	printf("success delete entry values");
 }
 
-void delete_entry_by_key(char *key)
+void delete_entry_by_key(char *key, entry *entry_head)
 {
-	entry *entry_ptr = find_entry_by_key(key);
+	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
 		printf("key does not exist");
