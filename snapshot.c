@@ -88,7 +88,7 @@ int main(void) {
 		else if(strcmp(command->args_malloc_ptr[0], "list") == 0)
 		{
 			str_tolower(command->args_malloc_ptr[1]);
-			if(strcmp(command->args_malloc_ptr[1], "keys"))
+			if(strcmp(command->args_malloc_ptr[1], "keys") == 0)
 			{
 				if(entry_head && entry_head->values)
 				{
@@ -99,7 +99,7 @@ int main(void) {
 					printf("no entries");
 				}
 			}
-			else if(strcmp(command->args_malloc_ptr[1], "entries"))
+			else if(strcmp(command->args_malloc_ptr[1], "entries") == 0)
 			{
 				if(entry_head)
 				{
@@ -110,7 +110,7 @@ int main(void) {
 					printf("no entries");
 				}
 			}
-			else if(strcmp(command->args_malloc_ptr[1], "snapshots"))
+			else if(strcmp(command->args_malloc_ptr[1], "snapshots") == 0)
 			{
 				if(snapshot_head)
 				{
