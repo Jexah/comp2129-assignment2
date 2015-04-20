@@ -134,7 +134,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		char *next_space = strchr(values+1, ' ');
 		values = (next_space ? next_space : strchr(values+1, '\n'));
 	};
-	printf("success append values");
+	printf("success append values\n");
 }
 
 void delete_entry_values_by_key(char *key, entry *entry_head)
@@ -142,11 +142,11 @@ void delete_entry_values_by_key(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("key does not exist");
+		printf("key does not exist\n");
 		return;
 	}
 	delete_entry_values(entry_ptr);
-	printf("success delete entry values");
+	printf("success delete entry values\n");
 }
 
 void delete_entry_by_key(char *key, entry *entry_head)
@@ -154,11 +154,11 @@ void delete_entry_by_key(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("key does not exist");
+		printf("key does not exist\n");
 		return;
 	}
 	delete_entry(entry_ptr);
-	printf("success delete entry");
+	printf("success delete entry\n");
 }
 
 #endif

@@ -215,9 +215,20 @@ int main(void) {
 			}
 			else if(strcmp(command->args_malloc_ptr[1], "entries") == 0)
 			{
-				if(entry_head)
+				if(entry_head->next)
 				{
-
+					entry *cursor = entry_head;
+					printf("[");
+					while(cursor->next)
+					{
+						printf("%s", cursor->key);
+						if(!cursor->next)
+						{
+							printf(" ");
+						}
+						cursor = cursor->next;
+					}
+					printf("]");
 				}
 				else
 				{
