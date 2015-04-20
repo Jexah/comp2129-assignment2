@@ -126,8 +126,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		value *entry_ptr_values_head = malloc(sizeof(value));
 		entry_ptr->values = malloc(sizeof(&entry_ptr_values_head));
 		entry_ptr->values = entry_ptr_values_head;
-		entry_ptr->key = malloc(strlen(key));
-		strcpy(entry_ptr->key, key);
+		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
 		append_entry_to_entry_head(entry_ptr, entry_head);
 	}
 	while(values)
