@@ -73,6 +73,10 @@ void append_int_to_entry(int number, entry *entry_ptr)
 
 void delete_entry_values(entry *target_entry)
 {
+	if(!target_entry->values)
+	{
+		return;
+	}
 	value *cursor = target_entry->values->next;
 	while(free(cursor->prev), (cursor = cursor->next));
 }
