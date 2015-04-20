@@ -219,10 +219,10 @@ int main(void) {
 				{
 					entry *cursor = entry_head->next;
 					printf("[");
-					while(cursor->next)
+					while(cursor)
 					{
 						printf("%s", cursor->key);
-						if(!cursor->next)
+						if(cursor->next)
 						{
 							printf(" ");
 						}
