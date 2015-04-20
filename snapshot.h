@@ -4,6 +4,18 @@
 #define MAX_KEY_LENGTH 16
 #define MAX_LINE_LENGTH 1024
 
+typedef struct command_struct
+{
+	char *args_malloc_ptr[3];
+} command_struct;
+
+char *get_arg_from_pointer_malloc_ptr(char *);
+char *get_long_arg_from_pointer_malloc_ptr(char *);
+char *get_pointer_to_arg_ptr(char *, int);
+char *get_arg_malloc_ptr(char *, int);
+int get_num_args(char *);
+command_struct *get_command_struct(char *);
+
 typedef struct value value;
 typedef struct entry entry;
 typedef struct snapshot snapshot;
@@ -113,7 +125,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		entry_ptr = malloc(sizeof(entry));
 		append_entry_to_entry_head(entry_ptr, entry_head);
 	}
-	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values, ' ')) || (values = strchr(values, '\n')));
+	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values, ' ') + 1) || (values = strchr(values, '\n') + 1));
 	printf("success append values");
 }
 

@@ -2,21 +2,128 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "snapshot.h"
 
 
+
+// **************************************************************
+// *********************   Helper module    *********************
+// **************************************************************
+// Notes:
+//			None
+
+// Helper function to convert a string to lowercase.
 void str_tolower(char *str)
 {
-	for(int i = 0; str[i]; ++i){
-		str[i] = tolower(str[i]);
+	while(*str++)
+	{
+		*str = tolower(*str);
 	}
 }
 
+// //////////////////////////////////////////////////////////////
+// /////////////////////   Helper module    /////////////////////
+// //////////////////////////////////////////////////////////////
 
-#include "snapshot.h"
 
-#include "command.c"
-#include "list.c"
 
+
+// **************************************************************
+// *********************   Command module   *********************
+// **************************************************************
+// Notes:
+//			Short argument is defined as an argument that does not contain spaces.
+//			Long argument is defined as an argument that also contains spaces.
+
+
+// Take input string and return the first short argument.
+char *get_arg_from_pointer_malloc_ptr(char *start_ptr)
+{
+	char *first_space = strchr(start_ptr, ' ');
+	char *return_ptr = calloc(((first_space ? first_space : strchr(start_ptr, '\n')) - start_ptr) + 1 , 1);
+	char *rolling_ptr = return_ptr;
+	while(*start_ptr != ' ' && *start_ptr != '\n' && (*rolling_ptr++ = *start_ptr++));
+	return return_ptr;
+}
+
+// Take input string and return the first long argument found.
+char *get_long_arg_from_pointer_malloc_ptr(char *start_ptr)
+{
+	char *return_malloc_ptr = calloc((strchr(start_ptr, '\n') - start_ptr) + 1, 1);
+	char *rolling_ptr = return_malloc_ptr;
+	while(*start_ptr != '\n' && (*rolling_ptr++ = *start_ptr++));
+	return return_malloc_ptr;
+}
+
+// Returns a (char *) to the argument index specified.
+char *get_pointer_to_arg_ptr(char *start_ptr, int arg)
+{
+	for(int i = 0; i < arg; ++i)
+	{
+		start_ptr = strchr(start_ptr, ' ') + 1;
+	}
+	return start_ptr;
+}
+
+// Returns a pointer to the specified short argument in the specified input. The pointer must be freed.
+char *get_arg_malloc_ptr(char *input_ptr, int arg)
+{
+	return get_arg_from_pointer_malloc_ptr(get_pointer_to_arg_ptr(input_ptr, arg));
+}
+
+// Returns a pointer to the specified long argument in the specified input. The pointer must be freed.
+char *get_long_arg_malloc_ptr(char *input_ptr, int arg)
+{
+	return get_long_arg_from_pointer_malloc_ptr(get_pointer_to_arg_ptr(input_ptr, arg));
+}
+
+// Returns the number of short arguments in the string.
+int get_num_args(char *start_ptr)
+{
+	int num_args = (!!*start_ptr);
+	while(*start_ptr++)
+	{
+		num_args += *start_ptr == ' ';
+	}
+	return num_args;
+}
+
+// Returns a command object based on given input.
+command_struct *get_command_struct(char *input_ptr)
+{
+	if(!*input_ptr) return 0;
+	command_struct *malloc_ptr = calloc(sizeof(command_struct), 1);
+	int num_args = get_num_args(input_ptr);
+	if(num_args >= 1) malloc_ptr->args_malloc_ptr[0] = get_arg_malloc_ptr(input_ptr, 0);
+	str_tolower(malloc_ptr->args_malloc_ptr[0]);
+	if(num_args >= 2) malloc_ptr->args_malloc_ptr[1] = get_arg_malloc_ptr(input_ptr, 1);
+	if(num_args >= 3) malloc_ptr->args_malloc_ptr[2] = get_long_arg_malloc_ptr(input_ptr, 2);
+	return malloc_ptr;
+}
+
+void free_command(command_struct *command)
+{
+	for(int i = 0; i < 3; ++i)
+	{
+		free(command->args_malloc_ptr[i]);
+	}
+	free(command);
+}
+
+// //////////////////////////////////////////////////////////////
+// /////////////////////   Command module   /////////////////////
+// //////////////////////////////////////////////////////////////
+
+
+
+
+// **************************************************************
+// *********************   Options module   *********************
+// **************************************************************
+// Notes:
+//			None
+
+// Prints help string
 void print_help_string(void)
 {
 	printf(\
@@ -54,6 +161,10 @@ void print_help_string(void)
 		"SORT <key> sorts entry values in ascending order\n"
 	);
 }
+
+// //////////////////////////////////////////////////////////////
+// /////////////////////   Options module   /////////////////////
+// //////////////////////////////////////////////////////////////
 
 // most recently added
 entry* entry_head = NULL;
@@ -202,11 +313,7 @@ int main(void) {
 		{
 
 		}
-		for(int i = 0; i < 3; ++i)
-		{
-			free(command->args_malloc_ptr[i]);
-		}
-		free(command);
+		free_command(command);
 	}
 
 	return 0;
