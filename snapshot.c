@@ -217,7 +217,7 @@ int main(void) {
 			{
 				if(entry_head->next)
 				{
-					entry *cursor = entry_head;
+					entry *cursor = entry_head->next;
 					printf("[");
 					while(cursor->next)
 					{
