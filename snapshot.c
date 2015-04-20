@@ -344,8 +344,8 @@ int main(void) {
 		}
 		printf("\n> ");
 		free_command(command);
-		free_entries_from_head(entry_head);
 	}
+	free_entries_from_head(entry_head);
 
 	return 0;
 }
