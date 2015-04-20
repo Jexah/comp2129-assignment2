@@ -221,7 +221,7 @@ int main(void) {
 					printf("[");
 					while(cursor)
 					{
-						printf("%s", cursor->key);
+						printf("'%s'", cursor->key);
 						if(cursor->next)
 						{
 							printf(" ");
