@@ -128,7 +128,12 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		entry_ptr->values = entry_ptr_values_head;
 		append_entry_to_entry_head(entry_ptr, entry_head);
 	}
-	while(append_int_to_entry(atoi(values), entry_ptr), (values = strchr(values+1, ' ')) || (values = strchr(values+1, '\n')));
+	while(values)
+	{
+		append_int_to_entry(atoi(values), entry_ptr);
+		char *next_space = strchr(values+1, ' ');
+		values = (next_space ? next_space : strchr(values+1, '\n'));
+	};
 	printf("success append values");
 }
 
