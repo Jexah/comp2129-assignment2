@@ -167,12 +167,15 @@ void print_help_string(void)
 // //////////////////////////////////////////////////////////////
 
 // most recently added
-entry* entry_head = NULL;
+entry* entry_head = NULL
 snapshot* snapshot_head = NULL;
 
 
 
 int main(void) {
+
+	entry_head = malloc(sizeof(entry));
+	snapshot_head = malloc(sizeof(snapshot));
 
 	char buffer[MAX_LINE_LENGTH];
 
