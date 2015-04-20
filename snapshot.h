@@ -85,6 +85,17 @@ void delete_entry(entry *target_entry)
     free(target_entry);
 }
 
+void free_entries_from_head(entry *entry_head)
+{
+	entry *cursor = entry_head;
+	while(cursor)
+	{
+		entry_head = cursor;
+		delete_entry(entry_head);
+		cursor = cursor->next;
+	}
+}
+
 void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
     entry *cursor = entry_head_ptr;
