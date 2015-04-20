@@ -237,10 +237,6 @@ int main(void) {
 							}
 						}
 						entry_cursor = entry_cursor->next;
-						if(entry_cursor)
-						{
-							printf(" ");
-						}
 						printf("]\n");
 					}
 				}
