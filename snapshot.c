@@ -174,8 +174,8 @@ snapshot* snapshot_head = NULL;
 
 int main(void) {
 
-	entry_head = malloc(sizeof(entry));
-	snapshot_head = malloc(sizeof(snapshot));
+	entry_head = calloc(sizeof(entry), 1);
+	snapshot_head = calloc(sizeof(snapshot), 1);
 
 	char buffer[MAX_LINE_LENGTH];
 

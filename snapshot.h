@@ -66,7 +66,7 @@ void append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 
 void append_int_to_entry(int number, entry *entry_ptr)
 {
-    value *new_value_ptr = malloc(sizeof(value));
+    value *new_value_ptr = calloc(sizeof(value), 1);
     new_value_ptr->value = number;
     append_value_to_entry(new_value_ptr, entry_ptr);
 }
@@ -121,9 +121,9 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		entry_ptr = malloc(sizeof(entry));
-		value *entry_ptr_values_head = malloc(sizeof(value));
-		entry_ptr->values = malloc(sizeof(&entry_ptr_values_head));
+		entry_ptr = calloc(sizeof(entry), 1);
+		value *entry_ptr_values_head = calloc(sizeof(value), 1);
+		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
 		entry_ptr->values = entry_ptr_values_head;
 		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
 		append_entry_to_entry_head(entry_ptr, entry_head);
