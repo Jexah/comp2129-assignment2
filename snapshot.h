@@ -75,7 +75,6 @@ void delete_entry_values(entry *target_entry)
 {
 	value *cursor = target_entry->values->next;
 	while(free(cursor->prev), (cursor = cursor->next));
-    target_entry->values = 0;
 }
 
 void delete_entry(entry *target_entry)

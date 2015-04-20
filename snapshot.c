@@ -250,17 +250,11 @@ int main(void) {
 				if(snapshot_head->next)
 				{
 					snapshot *cursor = snapshot_head->next;
-					printf("[");
 					while(cursor)
 					{
-						printf("%d", cursor->id);
-						if(cursor->next)
-						{
-							printf(" ");
-						}
+						printf("%d\n", cursor->id);
 						cursor = cursor->next;
 					}
-					printf("]");
 				}
 				else
 				{
@@ -274,7 +268,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
 		{
-			delete_entry_values_by_key(command->args_malloc_ptr[1], entry_head);
+			delete_entry_by_key(command->args_malloc_ptr[1], entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "purge") == 0)
 		{
