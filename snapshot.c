@@ -204,9 +204,14 @@ int main(void) {
 			str_tolower(command->args_malloc_ptr[1]);
 			if(strcmp(command->args_malloc_ptr[1], "keys") == 0)
 			{
-				if(entry_head && entry_head->values)
+				if(entry_head->next)
 				{
-
+					entry *cursor = entry_head->next;
+					while(cursor)
+					{
+						printf("%s\n", cursor->key);
+						cursor = cursor->next;
+					}
 				}
 				else
 				{
@@ -217,18 +222,27 @@ int main(void) {
 			{
 				if(entry_head->next)
 				{
-					entry *cursor = entry_head->next;
-					printf("[");
-					while(cursor)
+					entry *entry_cursor = entry_head->next;
+					while(entry_cursor)
 					{
-						printf("'%s'", cursor->key);
-						if(cursor->next)
+						printf("%s [", entry_cursor->key);
+						value *value_cursor = entry_cursor->values->next;
+						while(value_cursor)
+						{
+							printf("%d", value_cursor->value);
+							value_cursor = value_cursor->next;
+							if(value_cursor)
+							{
+								printf(" ");
+							}
+						}
+						entry_cursor = entry_cursor->next;
+						if(entry_cursor)
 						{
 							printf(" ");
 						}
-						cursor = cursor->next;
 					}
-					printf("]");
+					printf("]\n");
 				}
 				else
 				{
@@ -237,9 +251,20 @@ int main(void) {
 			}
 			else if(strcmp(command->args_malloc_ptr[1], "snapshots") == 0)
 			{
-				if(snapshot_head)
+				if(snapshot_head->next)
 				{
-
+					snapshot *cursor = snapshot_head->next;
+					printf("[");
+					while(cursor)
+					{
+						printf("%d", cursor->id);
+						if(cursor->next)
+						{
+							printf(" ");
+						}
+						cursor = cursor->next;
+					}
+					printf("]");
 				}
 				else
 				{
@@ -327,6 +352,7 @@ int main(void) {
 		{
 
 		}
+		printf("\n> ");
 		free_command(command);
 	}
 
