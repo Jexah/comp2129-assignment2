@@ -144,6 +144,7 @@ STATUS push_entry_on_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 	{
 		new_second->prev = new_entry_ptr;
 	}
+	new_entry_ptr->prev = entry_head_ptr;
 	new_entry_ptr->next = new_second;
 	entry_head_ptr->next = new_entry_ptr;
 	DEBUG("push_entry_on_entry_head-> OK\n");
