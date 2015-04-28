@@ -377,9 +377,9 @@ STATUS print_value_index_from_entry(int index, entry *entry)
 	return OK;
 }
 
-STATUS print_value_index_from_key(int index, char *key)
+STATUS print_value_index_from_key(int index, char *key, entry *entry_head)
 {
-	entry *found = find_entry_by_key(key);
+	entry *found = find_entry_by_key(key, entry_head);
 	if(!found)
 	{
 		DEBUG("print_value_index_from_key-> !found\n");
@@ -736,7 +736,7 @@ void append_command(command_struct *command, entry *entry_head)
 
 void pick_command(command_struct *command, entry *entry_head)
 {
-	STATUS print_value_status = print_value_index_from_key(command->args_malloc_ptr[2], command->args_malloc_ptr[1]);
+	STATUS print_value_status = print_value_index_from_key(command->args_malloc_ptr[2], command->args_malloc_ptr[1], entry_head);
 	switch(print_value_status)
 	{
 		case OK:
