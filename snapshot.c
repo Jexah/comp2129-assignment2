@@ -640,7 +640,7 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 	}
 }
 
-STATUS set_command(command_struct *command, entry *entry_head)
+void set_command(command_struct *command, entry *entry_head)
 {
 	STATUS set_entry_values_status = set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(set_entry_values_status)
@@ -654,7 +654,7 @@ STATUS set_command(command_struct *command, entry *entry_head)
 	}
 }
 
-STATUS push_command(command_struct *command, entry *entry_head)
+void push_command(command_struct *command, entry *entry_head)
 {
 	STATUS push_ints_status = push_ints_on_entry_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(push_ints_status)
