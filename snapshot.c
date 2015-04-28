@@ -271,7 +271,7 @@ STATUS push_int_on_entry(int number, entry *entry)
 	{
 		return get_new_value_status;
 	}
-	return push_value_on_entry(new_value, entry_head);
+	return push_value_on_entry(new_value, entry);
 }
 
 STATUS push_value_on_entry(value *new_value, entry *entry)
