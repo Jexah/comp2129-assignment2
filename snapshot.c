@@ -41,7 +41,11 @@ STATUS *get_new_value(int number, value **new_value_ptr)
 {
     *new_value_ptr = calloc(sizeof(value), 1);
 	(*new_value_ptr)->value = number;
-	return new_value_ptr;
+	if(!*new_value_ptr)
+	{
+		return CALLOC_FAILED;
+	}
+	return OK;
 }
 
 STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
