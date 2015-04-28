@@ -182,7 +182,7 @@ void print_values_in_entry(entry *entry_head)
 	printf("]");
 }
 
-void command_get(command_struct *command, entry *entry_head)
+void get_command(command_struct *command, entry *entry_head)
 {
 	entry *found = find_entry_by_key(command->args_malloc_ptr[1], entry_head);
 	if(!found)
@@ -191,6 +191,166 @@ void command_get(command_struct *command, entry *entry_head)
 		return;
 	}
 	print_values_in_entry(found);
+}
+
+void del_command(command_struct *command, entry *entry_head)
+{
+	STATUS status = delete_entry_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case default:
+			printf("unknown error (del command): %d", status);
+			break;
+	}
+}
+
+void purge_command(command_struct *command, entry *entry_head, snapshot *snapshot_head)
+{
+	STATUS status = purge_entry(command->args_malloc_ptr[1], entry_head, snapshot_head);
+	switch(status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case default:
+			printf("whoops (purge command: %d)", status)
+			break;
+	}
+}
+
+STATUS list_command_keys(entry *entry_head)
+{
+	if(entry_head->next)
+	{
+		entry *cursor = entry_head->next;
+		while(cursor)
+		{
+			printf("%s\n", cursor->key);
+			cursor = cursor->next;
+		}
+	}
+	else
+	{
+		return NO_KEYS;
+	}
+	return OK;
+}
+
+STATUS list_command_entries(entry *entry_head)
+{
+	if(entry_head->next)
+	{
+		entry *entry_cursor = entry_head->next;
+		while(entry_cursor)
+		{
+			printf("%s [", entry_cursor->key);
+			value *value_cursor = entry_cursor->values->next;
+			while(value_cursor)
+			{
+				printf("%d", value_cursor->value);
+				value_cursor = value_cursor->next;
+				if(value_cursor)
+				{
+					printf(" ");
+				}
+			}
+			entry_cursor = entry_cursor->next;
+			printf("]\n");
+		}
+	}
+	else
+	{
+		return NO_ENTRIES;
+	}
+	return OK;
+}
+
+STATUS list_command_snapshots(snapshot *snapshot_head)
+{
+	if(snapshot_head->next)
+	{
+		snapshot *cursor = snapshot_head->next;
+		while(cursor)
+		{
+			printf("%d\n", cursor->id);
+			cursor = cursor->next;
+		}
+	}
+	else
+	{
+		return NO_SNAPSHOTS;
+	}
+	return OK;
+}
+
+void list_command(command_struct *command, entry *entry_head, snapshot *snapshot_head)
+{
+	str_tolower(command->args_malloc_ptr[1]);
+	if(strcmp(command->args_malloc_ptr[1], "keys") == 0)
+	{
+		STATUS list_keys_status = list_command_keys(entry_head);
+		switch(list_keys_status)
+		{
+			case OK:
+				return;
+			case NO_KEYS:
+				printf("no keys\n");
+				return;
+			case default:
+				printf("Whoops! (list_command [keys]: %d)", list_keys_status);
+				return;
+		}
+	}
+	else if(strcmp(command->args_malloc_ptr[1], "entries") == 0)
+	{
+		STATUS list_entries_status = list_command_entries(entry_head);
+		switch(list_entries_status)
+		{
+			case OK:
+				return;
+			case NO_ENTRIES:
+				printf("no entries\n");
+				return;
+			case default:
+				printf("Whoops! (list_command [entries]: %d)", list_entries_status);
+				return;
+		}
+	}
+	else if(strcmp(command->args_malloc_ptr[1], "snapshots") == 0)
+	{
+		STATUS list_snapshots_status = list_command_snapshots(snapshot_head);
+		switch(list_snapshots_status)
+		{
+			case OK:
+				return;
+			case NO_SNAPSHOTS:
+				printf("no snapshots\n");
+				return;
+			case default:
+				printf("Whoops! (list_command [snapshots]: %d)", list_snapshots_status);
+				return;
+		}
+	}
+}
+
+void set_command(command_struct *command, entry *entry_head)
+{
+	STATUS set_entry_values_status = set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
+	switch(set_entry_values_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case default:
+			printf("Whoops! (set_command: %d)", set_entry_values_status);
+			break;
+	}
 }
 
 // //////////////////////////////////////////////////////////////
@@ -214,10 +374,6 @@ int main(void) {
 		struct command_struct *command = get_command_struct(buffer);
 		if(!command) continue;
 
-		if(command->args_malloc_ptr[0]) printf("Arg1: '%s'\n", command->args_malloc_ptr[0]);
-		if(command->args_malloc_ptr[1]) printf("Arg2: %s\n", command->args_malloc_ptr[1]);
-		if(command->args_malloc_ptr[2]) printf("Arg3: %s\n", command->args_malloc_ptr[2]);
-
 
 		if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
@@ -230,82 +386,22 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "list") == 0)
 		{
-			str_tolower(command->args_malloc_ptr[1]);
-			if(strcmp(command->args_malloc_ptr[1], "keys") == 0)
-			{
-				if(entry_head->next)
-				{
-					entry *cursor = entry_head->next;
-					while(cursor)
-					{
-						printf("%s\n", cursor->key);
-						cursor = cursor->next;
-					}
-				}
-				else
-				{
-					printf("no keys");
-				}
-			}
-			else if(strcmp(command->args_malloc_ptr[1], "entries") == 0)
-			{
-				if(entry_head->next)
-				{
-					entry *entry_cursor = entry_head->next;
-					while(entry_cursor)
-					{
-						printf("%s [", entry_cursor->key);
-						value *value_cursor = entry_cursor->values->next;
-						while(value_cursor)
-						{
-							printf("%d", value_cursor->value);
-							value_cursor = value_cursor->next;
-							if(value_cursor)
-							{
-								printf(" ");
-							}
-						}
-						entry_cursor = entry_cursor->next;
-						printf("]\n");
-					}
-				}
-				else
-				{
-					printf("no entries");
-				}
-			}
-			else if(strcmp(command->args_malloc_ptr[1], "snapshots") == 0)
-			{
-				if(snapshot_head->next)
-				{
-					snapshot *cursor = snapshot_head->next;
-					while(cursor)
-					{
-						printf("%d\n", cursor->id);
-						cursor = cursor->next;
-					}
-				}
-				else
-				{
-					printf("no snapshots");
-				}
-			}
+			list_command(command, entry_head, snapshot_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "get") == 0)
 		{
-			command_get(command, entry_head);
+			get_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
 		{
-			delete_entry_by_key(command->args_malloc_ptr[1], entry_head);
+			del_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "purge") == 0)
 		{
-
+			purge_command(command, entry_head, snapshot_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "set") == 0)
 		{
-			set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "push") == 0)
 		{

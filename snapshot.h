@@ -9,6 +9,8 @@ typedef struct command_struct
 	char *args_malloc_ptr[3];
 } command_struct;
 
+typedef enum STATUS { OK, NO_KEY, NO_KEYS, NO_ENTRIES, NO_SNAPSHOTS, NO_ENTRY, NO_SNAPSHOT } STATUS;
+
 char *get_arg_from_pointer_malloc_ptr(char *);
 char *get_long_arg_from_pointer_malloc_ptr(char *);
 char *get_pointer_to_arg_ptr(char *, int);
@@ -54,7 +56,7 @@ void create_entry(char *, entry *);
 
 
 
-void append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
+STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 {
     value *cursor = entry_ptr->values;
 	while(cursor->next)
@@ -63,16 +65,17 @@ void append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 	}
     cursor->next = new_value_ptr;
     new_value_ptr->prev = cursor;
+	return OK;
 }
 
-void append_int_to_entry(int number, entry *entry_ptr)
+STATUS append_int_to_entry(int number, entry *entry_ptr)
 {
     value *new_value_ptr = calloc(sizeof(value), 1);
     new_value_ptr->value = number;
-    append_value_to_entry(new_value_ptr, entry_ptr);
+    return append_value_to_entry(new_value_ptr, entry_ptr);
 }
 
-void delete_entry_values(entry *target_entry)
+STATUS delete_entry_values(entry *target_entry)
 {
 	if(!target_entry->values)
 	{
@@ -80,28 +83,39 @@ void delete_entry_values(entry *target_entry)
 	}
 	value *cursor = target_entry->values->next;
 	while(free(cursor->prev), (cursor = cursor->next));
+	return OK;
 }
 
-void delete_entry(entry *target_entry)
+STATUS delete_entry(entry *target_entry)
 {
-    delete_entry_values(target_entry);
+    STATUS delete_success = delete_entry_values(target_entry);
+	if(delete_success != OK)
+	{
+		return delete_success;
+	}
     if(target_entry->next) target_entry->next->prev = target_entry->prev;
 	if(target_entry->prev) target_entry->prev->next = target_entry->next;
     free(target_entry);
+	return OK;
 }
 
-void free_entries_from_head(entry *entry_head)
+STATUS free_entries_from_head(entry *entry_head)
 {
 	entry *cursor = entry_head;
 	while(cursor)
 	{
 		entry_head = cursor;
-		delete_entry(entry_head);
+		STATUS delete_status = delete_entry(entry_head);
+		if(delete_status != OK)
+		{
+			return delete_status;
+		}
 		cursor = cursor->next;
 	}
+	return OK;
 }
 
-void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
+STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
     entry *cursor = entry_head_ptr;
     while(cursor && cursor->next)
@@ -110,6 +124,7 @@ void append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 	}
     cursor->next = new_entry_ptr;
     new_entry_ptr->prev = cursor;
+	return OK;
 }
 
 entry *find_entry_by_key(char *key_ptr, entry *entry_head)
@@ -126,31 +141,66 @@ entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 	return 0;
 }
 
-void set_entry_values_by_key(char *key, char *values, entry *entry_head)
+STATUS set_entry_values_by_key(char *key, char *values, entry *entry_head)
 {
-	delete_entry_values_by_key(key, entry_head);
-	create_entry(key, entry_head);
-	append_entry_values_by_key(key, values, entry_head);
+	STATUS method_status = delete_entry_values_by_key(key, entry_head);
+	if(method_status != OK)
+	{
+		return method_status;
+	}
+	method_status = create_entry(key, entry_head);
+	if(method_status != OK)
+	{
+		return method_status;
+	}
+	method_status = append_entry_values_by_key(key, values, entry_head);
+	if(method_status != OK)
+	{
+		return method_status;
+	}
 }
 
-void append_entry_values_by_key(char *key, char *values, entry *entry_head)
+void print_values_in_entry(entry *entry_head)
+{
+	if(!entry_head)
+	{
+		printf("no such entry\n");
+	}
+	value *value_cursor = entry_head->values->next;
+	printf("[");
+	while(value_cursor)
+	{
+		printf("%d", value_cursor->value);
+		value_cursor = value_cursor->next;
+		if(value_cursor)
+		{
+			printf(" ");
+		}
+	}
+	printf("]");
+}
+
+STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("entry does not exist (append_entry_values_by_key)");
-		return;
+		return NO_KEY;
 	}
 	while(values)
 	{
-		append_int_to_entry(atoi(values), entry_ptr);
+		STATUS append_int_status = append_int_to_entry(atoi(values), entry_ptr);
+		if(append_int_status != OK)
+		{
+			return append_int_status;
+		}
 		char *next_space = strchr(values+1, ' ');
 		values = (next_space ? next_space : strchr(values+1, '\n'));
 	};
-	printf("success append values\n");
+	return OK;
 }
 
-void create_entry(char *key, entry *entry_head)
+STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
@@ -160,32 +210,61 @@ void create_entry(char *key, entry *entry_head)
 		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
 		entry_ptr->values = entry_ptr_values_head;
 		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
-		append_entry_to_entry_head(entry_ptr, entry_head);
+		STATUS append_entry_status = append_entry_to_entry_head(entry_ptr, entry_head);
+		if(append_entry_status != OK)
+		{
+			return append_entry_status;
+		}
 	}
 }
 
-void delete_entry_values_by_key(char *key, entry *entry_head)
+STATUS delete_entry_values_by_key(char *key, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("key does not exist\n");
-		return;
+		return NO_KEY;
 	}
-	delete_entry_values(entry_ptr);
-	printf("success delete entry values\n");
+	STATUS delete_entry_values_status = delete_entry_values(entry_ptr);
+	if(delete_entry_values_status != OK)
+	{
+		return delete_entry_values_status;
+	}
+	return OK;
 }
 
-void delete_entry_by_key(char *key, entry *entry_head)
+STATUS delete_entry_by_key(char *key, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("no such key\n");
-		return;
+		return NO_KEY;
 	}
-	delete_entry(entry_ptr);
-	printf("success delete entry\n");
+	STATUS delete_entry_status = delete_entry(entry_ptr);
+	if(delete_entry_status != OK)
+	{
+		return delete_entry_status;
+	}
+}
+
+STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
+{
+	STATUS del_command_status = del_command(command, entry_head);
+	if(del_command_status != OK && del_command_status != NO_KEY)
+	{
+		return del_command_status;
+	}
+	snapshot *snapshot_cursor = snapshot_head->next;
+	while(snapshot_cursor)
+	{
+		del_command_status = delete_entry_by_key(key, snapshot_cursor->entries);
+		if(del_command_status != OK && del_command_status != NO_KEY)
+		{
+			return del_command_status;
+		}
+		snapshot_cursor = snapshot_cursor->next;
+	}
+	return OK;
 }
 
 #endif
