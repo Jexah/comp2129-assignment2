@@ -4,11 +4,11 @@
 #include <ctype.h>
 #include "snapshot.h"
 
-#define testing 1
-#ifdef testing
-#define debug(str)
+#define TESTING 1
+#if TESTING
+#define DEBUG(str)(printf("%s", str))
 #else
-#define debug(str)(printf("%s", str))
+#define DEBUG(str)
 #endif
 
 // **************************************************************
@@ -41,10 +41,10 @@ STATUS get_new_value(int number, value **new_value_ptr)
 	(*new_value_ptr)->value = number;
 	if(!*new_value_ptr)
 	{
-		debug("get_new_value-> !new_value_ptr");
+		DEBUG("get_new_value-> !new_value_ptr");
 		return MALLOC_FAILED;
 	}
-	debug("get_new_value-> OK");
+	DEBUG("get_new_value-> OK");
 	return OK;
 }
 
@@ -57,7 +57,7 @@ STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 	}
     cursor->next = new_value_ptr;
     new_value_ptr->prev = cursor;
-	debug("append_value_to_entry-> OK");
+	DEBUG("append_value_to_entry-> OK");
 	return OK;
 }
 
@@ -67,7 +67,7 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
 	STATUS get_new_value_status = get_new_value(number, &new_value_ptr);
 	if(get_new_value_status != OK)
 	{
-		debug("append_int_to_entry->get_new_value_status !OK");
+		DEBUG("append_int_to_entry->get_new_value_status !OK");
 		return get_new_value_status;
 	}
     return append_value_to_entry(new_value_ptr, entry_ptr);
@@ -77,17 +77,17 @@ STATUS delete_entry_values(entry *target_entry)
 {
 	if(!target_entry)
 	{
-		debug("delete_entry_values-> !target_entry");
+		DEBUG("delete_entry_values-> !target_entry");
 		return NO_ENTRY;
 	}
 	if(!target_entry->values)
 	{
-		debug("delete_entry_values->target_entry !values, OK");
+		DEBUG("delete_entry_values->target_entry !values, OK");
 		return OK;
 	}
 	value *cursor = target_entry->values->next;
 	while(free(cursor->prev), (cursor = cursor->next));
-	debug("delete_entry_values-> OK");
+	DEBUG("delete_entry_values-> OK");
 	return OK;
 }
 
@@ -96,13 +96,13 @@ STATUS delete_entry(entry *target_entry)
     STATUS delete_status = delete_entry_values(target_entry);
 	if(delete_status != OK)
 	{
-		debug("delete_entry->delete_status !OK");
+		DEBUG("delete_entry->delete_status !OK");
 		return delete_status;
 	}
     if(target_entry->next) target_entry->next->prev = target_entry->prev;
 	if(target_entry->prev) target_entry->prev->next = target_entry->next;
     free(target_entry);
-	debug("delete_entry-> OK");
+	DEBUG("delete_entry-> OK");
 	return OK;
 }
 
@@ -115,12 +115,12 @@ STATUS free_entries_from_head(entry *entry_head)
 		STATUS delete_status = delete_entry(entry_head);
 		if(delete_status != OK)
 		{
-			debug("free_entries_from_head->delete_status !OK");
+			DEBUG("free_entries_from_head->delete_status !OK");
 			return delete_status;
 		}
 		cursor = cursor->next;
 	}
-	debug("free_entries_from_head-> OK");
+	DEBUG("free_entries_from_head-> OK");
 	return OK;
 }
 
@@ -133,7 +133,7 @@ STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 	}
     cursor->next = new_entry_ptr;
     new_entry_ptr->prev = cursor;
-	debug("append_entry_to_entry_head-> OK");
+	DEBUG("append_entry_to_entry_head-> OK");
 	return OK;
 }
 
@@ -156,22 +156,22 @@ STATUS set_entry_values_by_key(char *key, char *values, entry *entry_head)
 	STATUS method_status = delete_entry_values_by_key(key, entry_head);
 	if(method_status != OK && method_status != NO_ENTRY)
 	{
-		debug("set_entry_values_by_key->delete_entry_values_by_key !OK !NO_ENTRY");
+		DEBUG("set_entry_values_by_key->delete_entry_values_by_key !OK !NO_ENTRY");
 		return method_status;
 	}
 	method_status = create_entry_if_not_exist(key, entry_head);
 	if(method_status != OK)
 	{
-		debug("set_entry_values_by_key->create_entry_if_not_exist !OK !NO_ENTRY");
+		DEBUG("set_entry_values_by_key->create_entry_if_not_exist !OK !NO_ENTRY");
 		return method_status;
 	}
 	method_status = append_entry_values_by_key(key, values, entry_head);
 	if(method_status != OK)
 	{
-		debug("set_entry_values_by_key->append_entry_values_by_key !OK");
+		DEBUG("set_entry_values_by_key->append_entry_values_by_key !OK");
 		return method_status;
 	}
-	debug("set_entry_values_by_key OK");
+	DEBUG("set_entry_values_by_key OK");
 	return OK;
 }
 
@@ -179,7 +179,7 @@ void print_values_in_entry(entry *entry_head)
 {
 	if(!entry_head)
 	{
-		debug("print_values_in_entry-> !entry_head");
+		DEBUG("print_values_in_entry-> !entry_head");
 		printf("no such entry\n");
 	}
 	value *value_cursor = entry_head->values->next;
@@ -201,7 +201,7 @@ STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		debug("append_entry_values_by_key-> !entry_ptr, NO_KEY");
+		DEBUG("append_entry_values_by_key-> !entry_ptr, NO_KEY");
 		return NO_KEY;
 	}
 	while(values)
@@ -209,13 +209,13 @@ STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		STATUS append_int_status = append_int_to_entry(atoi(values), entry_ptr);
 		if(append_int_status != OK)
 		{
-			debug("append_entry_values_by_key->append_int_status !OK");
+			DEBUG("append_entry_values_by_key->append_int_status !OK");
 			return append_int_status;
 		}
 		char *next_space = strchr(values+1, ' ');
 		values = (next_space ? next_space : strchr(values+1, '\n'));
 	};
-	debug("append_entry_values_by_key-> OK");
+	DEBUG("append_entry_values_by_key-> OK");
 	return OK;
 }
 
@@ -232,11 +232,11 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 		STATUS append_entry_status = append_entry_to_entry_head(entry_ptr, entry_head);
 		if(append_entry_status != OK)
 		{
-			debug("create_entry_if_not_exist->append_entry_status !OK");
+			DEBUG("create_entry_if_not_exist->append_entry_status !OK");
 			return append_entry_status;
 		}
 	}
-	debug("create_entry_if_not_exist-> OK");
+	DEBUG("create_entry_if_not_exist-> OK");
 	return OK;
 }
 
@@ -245,16 +245,16 @@ STATUS delete_entry_values_by_key(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		debug("delete_entry_values_by_key-> !entry_ptr, NO_KEY");
+		DEBUG("delete_entry_values_by_key-> !entry_ptr, NO_KEY");
 		return NO_KEY;
 	}
 	STATUS delete_entry_values_status = delete_entry_values(entry_ptr);
 	if(delete_entry_values_status != OK)
 	{
-		debug("delete_entry_values_by_key->delete_entry_values_status !OK");
+		DEBUG("delete_entry_values_by_key->delete_entry_values_status !OK");
 		return delete_entry_values_status;
 	}
-		debug("delete_entry_values_by_key-> OK");
+		DEBUG("delete_entry_values_by_key-> OK");
 	return OK;
 }
 
@@ -263,16 +263,16 @@ STATUS delete_entry_by_key(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		debug("delete_entry_by_key-> !entry_ptr NO_KEY");
+		DEBUG("delete_entry_by_key-> !entry_ptr NO_KEY");
 		return NO_KEY;
 	}
 	STATUS delete_entry_status = delete_entry(entry_ptr);
 	if(delete_entry_status != OK)
 	{
-		debug("delete_entry_by_key->delete_entry_status !OK");
+		DEBUG("delete_entry_by_key->delete_entry_status !OK");
 		return delete_entry_status;
 	}
-		debug("delete_entry_by_key-> OK");
+		DEBUG("delete_entry_by_key-> OK");
 	return OK;
 }
 
@@ -281,7 +281,7 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 	STATUS del_status = delete_entry_by_key(key, entry_head);
 	if(del_status != OK && del_status != NO_KEY)
 	{
-		debug("purge_entry->del_status [current] !OK !NO_KEY");
+		DEBUG("purge_entry->del_status [current] !OK !NO_KEY");
 		return del_status;
 	}
 	snapshot *snapshot_cursor = snapshot_head->next;
@@ -290,12 +290,12 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 		del_status = delete_entry_by_key(key, snapshot_cursor->entries);
 		if(del_status != OK && del_status != NO_KEY)
 		{
-			debug("purge_entry->del_status [snapshot] !OK !NO_KEY");
+			DEBUG("purge_entry->del_status [snapshot] !OK !NO_KEY");
 			return del_status;
 		}
 		snapshot_cursor = snapshot_cursor->next;
 	}
-	debug("purge_entry-> OK");
+	DEBUG("purge_entry-> OK");
 	return OK;
 }
 
@@ -305,7 +305,7 @@ STATUS push_int_on_entry(int number, entry *entry)
 	STATUS get_new_value_status = get_new_value(number, &new_value);
 	if(get_new_value_status != OK)
 	{
-		debug("push_int_on_entry->get_new_value_status !OK");
+		DEBUG("push_int_on_entry->get_new_value_status !OK");
 		return get_new_value_status;
 	}
 	return push_value_on_entry(new_value, entry);
@@ -317,7 +317,7 @@ STATUS push_value_on_entry(value *new_value, entry *entry)
 	entry->values->next = new_value;
 	new_value->next = new_second;
 	new_second->prev = new_value;
-	debug("push_value_on_entry-> OK");
+	DEBUG("push_value_on_entry-> OK");
 	return OK;
 }
 
@@ -326,7 +326,7 @@ STATUS push_int_on_entry_by_key(char *key, char *values, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		debug("push_int_on_entry_by_key-> !entry_ptr, NO_KEY");
+		DEBUG("push_int_on_entry_by_key-> !entry_ptr, NO_KEY");
 		return NO_KEY;
 	}
 	while(values)
@@ -334,13 +334,13 @@ STATUS push_int_on_entry_by_key(char *key, char *values, entry *entry_head)
 		STATUS push_int_status = push_int_on_entry(atoi(values), entry_ptr);
 		if(push_int_status != OK)
 		{
-			debug("push_int_on_entry_by_key->push_int_status !OK");
+			DEBUG("push_int_on_entry_by_key->push_int_status !OK");
 			return push_int_status;
 		}
 		char *next_space = strchr(values+1, ' ');
 		values = (next_space ? next_space : strchr(values+1, '\n'));
 	};
-	debug("push_int_on_entry_by_key-> OK");
+	DEBUG("push_int_on_entry_by_key-> OK");
 	return OK;
 }
 
