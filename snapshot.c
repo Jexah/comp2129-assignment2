@@ -29,11 +29,18 @@ void str_tolower(char *str)
 // **************************************************************
 // *********************   Database module  *********************
 // **************************************************************
-
-value *new_value(int number)
+/*
+value *get_new_value(int number)
 {
     value *new_value_ptr = calloc(sizeof(value), 1);
 	new_value_ptr->value = number;
+	return new_value_ptr;
+}
+*/
+STATUS *get_new_value(int number, value **new_value_ptr)
+{
+    *new_value_ptr = calloc(sizeof(value), 1);
+	*new_value_ptr->value = number;
 	return new_value_ptr;
 }
 
@@ -51,7 +58,7 @@ STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 
 STATUS append_int_to_entry(int number, entry *entry_ptr)
 {
-	value *new_value_ptr = new_value(number);
+	value *new_value_ptr = get_new_value(number);
 	if(!new_value_ptr)
 	{
 		return MALLOC_FAILED;
@@ -260,7 +267,9 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 
 STATUS push_int_on_entry(int number, entry *entry)
 {
-	value *new_value = new_value(number);
+	value *new_value;
+	//value *new_value = get_new_value(number);
+	STATUS howditgo = get_new_value(number, &new_value);
 	if(!new_value)
 	{
 		return MALLOC_FAILED;
