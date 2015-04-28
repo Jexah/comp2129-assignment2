@@ -50,6 +50,7 @@ void set_entry_values_by_key(char *, char *, entry *);
 void append_entry_values_by_key(char *, char *, entry *);
 void delete_entry_values_by_key(char *, entry *);
 void delete_entry_by_key(char *, entry *);
+void create_entry(char *, entry *);
 
 
 
