@@ -178,7 +178,7 @@ void print_values_in_entry(entry *entry_head)
 	printf("]");
 }
 
-void command_get(command_struct *command)
+void command_get(command_struct *command, entry *entry_head)
 {
 	entry *found = find_entry_by_key(command->args_malloc_ptr[1], entry_head);
 	if(!found)
@@ -289,7 +289,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "get") == 0)
 		{
-			command_get(command);
+			command_get(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
 		{
