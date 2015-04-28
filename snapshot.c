@@ -40,7 +40,7 @@ value *get_new_value(int number)
 STATUS *get_new_value(int number, value **new_value_ptr)
 {
     *new_value_ptr = calloc(sizeof(value), 1);
-	*new_value_ptr->value = number;
+	(*new_value_ptr)->value = number;
 	return new_value_ptr;
 }
 
