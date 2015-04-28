@@ -324,7 +324,7 @@ STATUS push_int_on_entry(int number, entry *entry)
 	return push_element_on_list(new_value, entry->values);
 }
 
-STATUS push_element_on_list(void *new_element, void *list)
+STATUS push_element_on_list(element *new_element, element *list)
 {
 	void *new_second = list->next;
 	list->next = new_element;
