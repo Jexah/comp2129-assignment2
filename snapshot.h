@@ -63,9 +63,13 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
 
 STATUS delete_entry_values(entry *target_entry)
 {
+	if(!target_entry)
+	{
+		return NO_ENTRY;
+	}
 	if(!target_entry->values)
 	{
-		return;
+		return OK;
 	}
 	value *cursor = target_entry->values->next;
 	while(free(cursor->prev), (cursor = cursor->next));
