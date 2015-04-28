@@ -379,7 +379,7 @@ STATUS print_value_index_from_entry(int index, entry *entry)
 
 STATUS print_value_index_from_key(int index, char *key)
 {
-	entry *found = find_entry_by_key(command->args_malloc_ptr[1]);
+	entry *found = find_entry_by_key(key);
 	if(!found)
 	{
 		DEBUG("print_value_index_from_key-> !found\n");
