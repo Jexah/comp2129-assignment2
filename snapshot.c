@@ -29,14 +29,7 @@ void str_tolower(char *str)
 // **************************************************************
 // *********************   Database module  *********************
 // **************************************************************
-/*
-value *get_new_value(int number)
-{
-    value *new_value_ptr = calloc(sizeof(value), 1);
-	new_value_ptr->value = number;
-	return new_value_ptr;
-}
-*/
+
 STATUS get_new_value(int number, value **new_value_ptr)
 {
     *new_value_ptr = calloc(sizeof(value), 1);
@@ -62,10 +55,11 @@ STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 
 STATUS append_int_to_entry(int number, entry *entry_ptr)
 {
-	value *new_value_ptr = get_new_value(number);
-	if(!new_value_ptr)
+	value *new_value_ptr;
+	STATUS get_new_value_status = get_new_value(number, &new_value_ptr);
+	if(get_new_value_status != OK)
 	{
-		return MALLOC_FAILED;
+		return get_new_value_status;
 	}
     return append_value_to_entry(new_value_ptr, entry_ptr);
 }
@@ -272,11 +266,10 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 STATUS push_int_on_entry(int number, entry *entry)
 {
 	value *new_value;
-	//value *new_value = get_new_value(number);
-	STATUS howditgo = get_new_value(number, &new_value);
-	if(!new_value)
+	STATUS get_new_value_status = get_new_value(number, &new_value);
+	if(get_new_value_status != OK)
 	{
-		return MALLOC_FAILED;
+		return get_new_value_status;
 	}
 	return push_value_on_entry(new_value, entry_head);
 }
