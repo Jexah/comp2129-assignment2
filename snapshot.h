@@ -181,7 +181,7 @@ void delete_entry_by_key(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		printf("key does not exist\n");
+		printf("no such key\n");
 		return;
 	}
 	delete_entry(entry_ptr);

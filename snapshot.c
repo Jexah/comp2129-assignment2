@@ -174,6 +174,10 @@ void print_values_in_entry(entry *entry_head)
 	{
 		printf("%d", value_cursor->value);
 		value_cursor = value_cursor->next;
+		if(value_cursor)
+		{
+			printf(" ");
+		}
 	}
 	printf("]");
 }
