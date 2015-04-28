@@ -331,7 +331,7 @@ STATUS push_value_on_entry(value *new_value, entry *entry)
 	new_value->next = new_second;
 	if(new_second)
 	{
-		new_second->prev = new_entry_ptr;
+		new_second->prev = new_value;
 	}
 	DEBUG("push_value_on_entry-> OK\n");
 	return OK;
