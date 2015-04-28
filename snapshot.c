@@ -277,7 +277,7 @@ STATUS push_int_on_entry(int number, entry *entry)
 STATUS push_value_on_entry(value *new_value, entry *entry)
 {
 	value *new_second = entry->values->next;
-	entry->values->next = value;
+	entry->values->next = new_value;
 	new_value->next = new_second;
 	new_second->prev = new_value;
 	return OK;
