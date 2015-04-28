@@ -44,7 +44,7 @@ int get_num_args(char *);
 command_struct *get_command_struct(char *);
 
 // Database operations
-STATUS new_value(int , value **);
+value new_value(int);
 STATUS append_value_to_entry(value *, entry *);
 STATUS append_int_to_entry(int, entry *);
 STATUS delete_entry_values(entry *);
