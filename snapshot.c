@@ -140,9 +140,12 @@ STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 STATUS push_entry_on_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
 	entry *new_second = entry_head_ptr->next;
-	entry_head_ptr->next = new_entry_ptr;
+	if(new_second)
+	{
+		new_second->prev = new_entry_ptr;
+	}
 	new_entry_ptr->next = new_second;
-	new_second->prev = new_entry_ptr;
+	entry_head_ptr->next = new_entry_ptr;
 	DEBUG("push_entry_on_entry_head-> OK\n");
 	return OK;
 }
@@ -239,7 +242,7 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
 		entry_ptr->values = entry_ptr_values_head;
 		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
-		STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
+		STATUS append_entry_status = push_element_on_list(entry_ptr, entry_head);
 		if(append_entry_status != OK)
 		{
 			DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
@@ -318,16 +321,19 @@ STATUS push_int_on_entry(int number, entry *entry)
 		DEBUG("push_int_on_entry->get_new_value_status !OK\n");
 		return get_new_value_status;
 	}
-	return push_value_on_entry(new_value, entry);
+	return push_element_on_list(new_value, entry->values);
 }
 
-STATUS push_value_on_entry(value *new_value, entry *entry)
+STATUS push_element_on_list(void *new_element, void *list)
 {
-	value *new_second = entry->values->next;
-	entry->values->next = new_value;
-	new_value->next = new_second;
-	new_second->prev = new_value;
-	DEBUG("push_value_on_entry-> OK\n");
+	void *new_second = list->next;
+	list->next = new_element;
+	new_element->next = new_second;
+	if(new_second)
+	{
+		new_second->prev = new_element;
+	}
+	DEBUG("push_element_on_list-> OK\n");
 	return OK;
 }
 
