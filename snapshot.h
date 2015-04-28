@@ -11,25 +11,29 @@ typedef struct command_struct
 
 typedef enum STATUS { OK, NO_KEY, NO_KEYS, NO_ENTRIES, NO_SNAPSHOTS, NO_ENTRY, NO_SNAPSHOT, MALLOC_FAILED } STATUS;
 
-typedef struct value {
+typedef struct value value;
+typedef struct entry entry;
+typedef struct snapshot snapshot;
+
+struct value {
   value* prev;
   value* next;
   int value;
-} value;
+};
 
-typedef struct entry {
+struct entry {
   entry* prev;
   entry* next;
   value* values;
   char key[MAX_KEY_LENGTH];
-} entry;
+};
 
-typedef struct snapshot {
+struct snapshot {
   snapshot* prev;
   snapshot* next;
   entry* entries;
   int id;
-} snapshot;
+};
 
 // Command interpretation
 char *get_arg_from_pointer_malloc_ptr(char *);
