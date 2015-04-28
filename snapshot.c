@@ -186,7 +186,7 @@ void command_get(command_struct *command, entry *entry_head)
 		printf("no such key\n");
 		return;
 	}
-	print_values_in_entry(entry_head);
+	print_values_in_entry(found);
 }
 
 // //////////////////////////////////////////////////////////////
