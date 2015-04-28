@@ -736,7 +736,7 @@ void append_command(command_struct *command, entry *entry_head)
 
 void pick_command(command_struct *command, entry *entry_head)
 {
-	STATUS print_value_status = print_value_index_from_key(command->args_malloc_ptr[2], command->args_malloc_ptr[1], entry_head);
+	STATUS print_value_status = print_value_index_from_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
 	switch(print_value_status)
 	{
 		case OK:
