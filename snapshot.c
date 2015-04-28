@@ -360,6 +360,39 @@ STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 	return OK;
 }
 
+STATUS print_value_index_from_entry(int index, entry *entry)
+{
+	value *cursor = entry->values;
+	for(int i = 0; i <= index; ++i)
+	{
+		if(!cursor->next)
+		{
+			DEBUG("print_value_index_from_entry-> !cursor->next, INDEX_OUT_OF_RANGE\n");
+			return INDEX_OUT_OF_RANGE;
+		}
+		cursor = cursor->next;
+	}
+	DEBUG("print_value_index_from_entry-> OK\n");
+	printf("%d\n", cursor->value);
+	return OK;
+}
+
+STATUS print_value_index_from_key(int index, char *key)
+{
+	entry *found = find_entry_by_key(command->args_malloc_ptr[1]);
+	if(!found)
+	{
+		DEBUG("print_value_index_from_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_value_status = print_value_index_from_entry(index, found);
+	if(print_value_status != OK)
+	{
+		return print_value_status;
+	}
+	DEBUG("print_value_index_from_key-> OK\n");
+	return OK;
+}
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -684,12 +717,39 @@ void push_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void append_command(command_struct *command, entry *entry_head)
+{
+	STATUS append_ints_status = append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
+	switch(append_ints_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		default:
+			printf("Whoops! (append_command: %d)", append_ints_status);
+			break;
+	}
+}
+
+void pick_command(command_struct *command, entry *entry_head)
+{
+	STATUS print_value_status = print_value_index_from_key(command->args_malloc_ptr[2], command->args_malloc_ptr[1]);
+	switch(print_value_status)
+	{
+		case OK:
+			break;
+		default:
+			printf("Whoops! (append_command: %d)", append_ints_status);
+			break;
+	}
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
-
-// most recently added
-
 
 
 int main(void) {
@@ -741,11 +801,11 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "append") == 0)
 		{
-			append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
+			append_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pick") == 0)
 		{
-
+			pick_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pluck") == 0)
 		{
