@@ -363,7 +363,7 @@ STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 STATUS print_value_index_from_entry(int index, entry *entry)
 {
 	value *cursor = entry->values;
-	for(int i = 0; i <= index; ++i)
+	for(int i = 0; i < index; ++i)
 	{
 		if(!cursor->next)
 		{
