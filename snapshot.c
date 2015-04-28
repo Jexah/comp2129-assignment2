@@ -43,7 +43,7 @@ STATUS *get_new_value(int number, value **new_value_ptr)
 	(*new_value_ptr)->value = number;
 	if(!*new_value_ptr)
 	{
-		return CALLOC_FAILED;
+		return MALLOC_FAILED;
 	}
 	return OK;
 }
