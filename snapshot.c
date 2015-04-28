@@ -748,7 +748,7 @@ void pick_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (append_command: %d)", append_ints_status);
+			printf("Whoops! (append_command: %d)", print_value_status);
 			break;
 	}
 }
