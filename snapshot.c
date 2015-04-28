@@ -464,7 +464,7 @@ void del_command(command_struct *command, entry *entry_head)
 		case NO_KEY:
 			printf("no such key\n");
 			break;
-		case default:
+		default:
 			printf("unknown error (del command): %d", status);
 			break;
 	}
@@ -478,7 +478,7 @@ void purge_command(command_struct *command, entry *entry_head, snapshot *snapsho
 		case OK:
 			printf("ok\n");
 			break;
-		case default:
+		default:
 			printf("whoops (purge command: %d)", status)
 			break;
 	}
@@ -562,7 +562,7 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 			case NO_KEYS:
 				printf("no keys\n");
 				return;
-			case default:
+			default:
 				printf("Whoops! (list_command [keys]: %d)", list_keys_status);
 				return;
 		}
@@ -577,7 +577,7 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 			case NO_ENTRIES:
 				printf("no entries\n");
 				return;
-			case default:
+			default:
 				printf("Whoops! (list_command [entries]: %d)", list_entries_status);
 				return;
 		}
@@ -592,7 +592,7 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 			case NO_SNAPSHOTS:
 				printf("no snapshots\n");
 				return;
-			case default:
+			default:
 				printf("Whoops! (list_command [snapshots]: %d)", list_snapshots_status);
 				return;
 		}
@@ -607,7 +607,7 @@ void set_command(command_struct *command, entry *entry_head)
 		case OK:
 			printf("ok\n");
 			break;
-		case default:
+		default:
 			printf("Whoops! (set_command: %d)", set_entry_values_status);
 			break;
 	}
