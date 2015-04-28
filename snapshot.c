@@ -35,6 +35,12 @@ void str_tolower(char *str)
 //			Short argument is defined as an argument that does not contain spaces.
 //			Long argument is defined as an argument that also contains spaces.
 
+char *get_arg_from_pointer_malloc_ptr(char *);
+char *get_long_arg_from_pointer_malloc_ptr(char *);
+char *get_pointer_to_arg_ptr(char *, int);
+char *get_arg_malloc_ptr(char *, int);
+int get_num_args(char *);
+command_struct *get_command_struct(char *);
 
 // Take input string and return the first short argument.
 char *get_arg_from_pointer_malloc_ptr(char *start_ptr)
@@ -162,25 +168,14 @@ void print_help_string(void)
 	);
 }
 
-void print_values_in_entry(entry *entry_head)
-{
-	if(!entry_head)
-	{
-		printf("no such entry\n");
-	}
-	value *value_cursor = entry_head->values;
-	printf("[");
-	while(value_cursor)
-	{
-		printf("%d", value_cursor->value);
-		value_cursor = value_cursor->next;
-		if(value_cursor)
-		{
-			printf(" ");
-		}
-	}
-	printf("]");
-}
+void get_command(command_struct *, entry *);
+void del_command(command_struct *, entry *);
+void purge_command(command_struct *, entry *, snapshot *);
+STATUS list_command_keys(entry *);
+STATUS list_command_entries(entry *);
+STATUS list_command_snapshots(snapshot *);
+void list_command(command_struct *, entry *, snapshot *);
+void set_command(command_struct *, entry *);
 
 void get_command(command_struct *command, entry *entry_head)
 {

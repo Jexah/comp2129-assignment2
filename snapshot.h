@@ -11,13 +11,6 @@ typedef struct command_struct
 
 typedef enum STATUS { OK, NO_KEY, NO_KEYS, NO_ENTRIES, NO_SNAPSHOTS, NO_ENTRY, NO_SNAPSHOT } STATUS;
 
-char *get_arg_from_pointer_malloc_ptr(char *);
-char *get_long_arg_from_pointer_malloc_ptr(char *);
-char *get_pointer_to_arg_ptr(char *, int);
-char *get_arg_malloc_ptr(char *, int);
-int get_num_args(char *);
-command_struct *get_command_struct(char *);
-
 typedef struct value value;
 typedef struct entry entry;
 typedef struct snapshot snapshot;
@@ -154,7 +147,7 @@ STATUS set_entry_values_by_key(char *key, char *values, entry *entry_head)
 	{
 		return method_status;
 	}
-	method_status = create_entry(key, entry_head);
+	method_status = create_entry_if_not_exist(key, entry_head);
 	if(method_status != OK)
 	{
 		return method_status;
@@ -164,6 +157,7 @@ STATUS set_entry_values_by_key(char *key, char *values, entry *entry_head)
 	{
 		return method_status;
 	}
+	return OK;
 }
 
 void print_values_in_entry(entry *entry_head)
@@ -222,6 +216,7 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 			return append_entry_status;
 		}
 	}
+	return OK;
 }
 
 STATUS delete_entry_values_by_key(char *key, entry *entry_head)
@@ -251,6 +246,7 @@ STATUS delete_entry_by_key(char *key, entry *entry_head)
 	{
 		return delete_entry_status;
 	}
+	return OK;
 }
 
 STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
