@@ -172,7 +172,7 @@ void print_values_in_entry(entry *entry_head)
 	printf("[");
 	while(value_cursor)
 	{
-		printf("%d", entry_head->value);
+		printf("%d", value_cursor->value);
 		value_cursor = value_cursor->next;
 	}
 	printf("]");
