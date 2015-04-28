@@ -262,7 +262,7 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 STATUS push_int_on_entry(int number, entry *entry)
 {
 	value *new_value;
-	STATUS new_value_status = new_values(number, &new_value);
+	STATUS new_value_status = new_value(number, &new_value);
 	if(new_value_status != OK)
 	{
 		return MALLOC_FAILED;
