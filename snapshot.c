@@ -166,13 +166,13 @@ void print_values_in_entry(entry *entry_head)
 {
 	if(!entry_head)
 	{
-		print("no such entry");
+		printf("no such entry");
 	}
 	value *value_cursor = entry_head->values;
 	printf("[");
 	while(value_cursor)
 	{
-		print("%d", entry_head->value);
+		printf("%d", entry_head->value);
 		value_cursor = value_cursor->next;
 	}
 	printf("]");
@@ -180,7 +180,7 @@ void print_values_in_entry(entry *entry_head)
 
 void command_get(command_struct *command)
 {
-	entry *found = find_entry_by_key(command->args_malloc_ptr[1]);
+	entry *found = find_entry_by_key(command->args_malloc_ptr[1], entry_head);
 	if(!found)
 	{
 		printf("no such key");
