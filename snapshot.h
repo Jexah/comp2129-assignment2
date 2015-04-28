@@ -128,6 +128,7 @@ entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 void set_entry_values_by_key(char *key, char *values, entry *entry_head)
 {
 	delete_entry_values_by_key(key, entry_head);
+	create_entry(key, entry_head);
 	append_entry_values_by_key(key, values, entry_head);
 }
 
@@ -137,6 +138,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	if(!entry_ptr)
 	{
 		printf("entry does not exist (append_entry_values_by_key)");
+		return;
 	}
 	while(values)
 	{
