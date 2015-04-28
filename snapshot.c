@@ -51,7 +51,7 @@ STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 
 STATUS append_int_to_entry(int number, entry *entry_ptr)
 {
-	value *new_value_ptr = new_value(number, &new_value_ptr);
+	value *new_value_ptr = new_value(number);
 	if(!new_value_ptr)
 	{
 		return MALLOC_FAILED;
