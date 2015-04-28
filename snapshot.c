@@ -6,7 +6,7 @@
 
 #define testing 1
 #ifdef testing
-#define debug(str)()
+#define debug(str)
 #else
 #define debug(str)(printf("%s", str))
 #endif
