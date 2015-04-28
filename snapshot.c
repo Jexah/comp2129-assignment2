@@ -137,6 +137,16 @@ STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 	return OK;
 }
 
+STATUS push_entry_on_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
+{
+	entry *new_second = entry_head_ptr->next;
+	entry_head_ptr->next = new_value;
+	new_entry_ptr->next = new_second;
+	new_second->prev = new_entry_ptr;
+	DEBUG("push_entry_on_entry_head-> OK\n");
+	return OK;
+}
+
 entry *find_entry_by_key(char *key_ptr, entry *entry_head)
 {
 	entry *cursor_ptr = entry_head;
@@ -229,7 +239,7 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
 		entry_ptr->values = entry_ptr_values_head;
 		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
-		STATUS append_entry_status = append_entry_to_entry_head(entry_ptr, entry_head);
+		STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
 		if(append_entry_status != OK)
 		{
 			DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
