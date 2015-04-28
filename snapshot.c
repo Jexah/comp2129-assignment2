@@ -741,6 +741,12 @@ void pick_command(command_struct *command, entry *entry_head)
 	{
 		case OK:
 			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("index out of range\n");
+			break;
 		default:
 			printf("Whoops! (append_command: %d)", append_ints_status);
 			break;
