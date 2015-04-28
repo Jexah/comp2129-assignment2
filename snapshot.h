@@ -42,20 +42,6 @@ struct snapshot {
   int id;
 };
 
-void append_value_to_entry(value *, entry *);
-void append_int_to_entry(int , entry *);
-void delete_entry_values(entry *);
-void delete_entry(entry *);
-void append_entry_to_entry_head(entry *, entry *);
-entry *find_entry_by_key(char *, entry *);
-void set_entry_values_by_key(char *, char *, entry *);
-void append_entry_values_by_key(char *, char *, entry *);
-void delete_entry_values_by_key(char *, entry *);
-void delete_entry_by_key(char *, entry *);
-void create_entry(char *, entry *);
-
-
-
 STATUS append_value_to_entry(value *new_value_ptr, entry *entry_ptr)
 {
     value *cursor = entry_ptr->values;
