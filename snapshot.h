@@ -61,6 +61,7 @@ STATUS delete_entry_by_key(char *, entry *);
 STATUS purge_entry(char *, entry *, snapshot *);
 STATUS push_int_on_entry(int, entry *);
 STATUS push_value_on_entry(value *, entry *);
+STATUS push_ints_on_entry_by_key(char *, char *, entry *);
 
 // Options
 void get_command(command_struct *, entry *);

@@ -193,7 +193,7 @@ void print_values_in_entry(entry *entry_head)
 			printf(" ");
 		}
 	}
-	printf("]");
+	printf("]\n");
 }
 
 STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
@@ -321,7 +321,7 @@ STATUS push_value_on_entry(value *new_value, entry *entry)
 	return OK;
 }
 
-STATUS push_int_on_entry_by_key(char *key, char *values, entry *entry_head)
+STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
@@ -640,7 +640,7 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 	}
 }
 
-void set_command(command_struct *command, entry *entry_head)
+STATUS set_command(command_struct *command, entry *entry_head)
 {
 	STATUS set_entry_values_status = set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(set_entry_values_status)
@@ -654,9 +654,18 @@ void set_command(command_struct *command, entry *entry_head)
 	}
 }
 
-void push_command(command_struct *command, entry *entry_head)
+STATUS push_command(command_struct *command, entry *entry_head)
 {
-
+	STATUS push_ints_status = push_ints_on_entry_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
+	switch(push_ints_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		default:
+			printf("Whoops! (push_command: %d)", push_ints_status);
+			break;
+	}
 }
 
 // //////////////////////////////////////////////////////////////
