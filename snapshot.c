@@ -241,18 +241,18 @@ STATUS delete_entry_by_key(char *key, entry *entry_head)
 
 STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 {
-	STATUS del_command_status = del_command(command, entry_head);
-	if(del_command_status != OK && del_command_status != NO_KEY)
+	STATUS del_status = delete_entry_by_key(key, entry_head);
+	if(del_status != OK && del_status != NO_KEY)
 	{
-		return del_command_status;
+		return del_status;
 	}
 	snapshot *snapshot_cursor = snapshot_head->next;
 	while(snapshot_cursor)
 	{
-		del_command_status = delete_entry_by_key(key, snapshot_cursor->entries);
-		if(del_command_status != OK && del_command_status != NO_KEY)
+		del_status = delete_entry_by_key(key, snapshot_cursor->entries);
+		if(del_status != OK && del_status != NO_KEY)
 		{
-			return del_command_status;
+			return del_status;
 		}
 		snapshot_cursor = snapshot_cursor->next;
 	}
