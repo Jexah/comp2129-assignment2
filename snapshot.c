@@ -479,7 +479,7 @@ void purge_command(command_struct *command, entry *entry_head, snapshot *snapsho
 			printf("ok\n");
 			break;
 		default:
-			printf("whoops (purge command: %d)", status)
+			printf("whoops (purge command: %d)", status);
 			break;
 	}
 }
