@@ -162,20 +162,44 @@ void print_help_string(void)
 	);
 }
 
+void print_values_in_entry(entry *entry_head)
+{
+	if(!entry_head)
+	{
+		print("no such entry");
+	}
+	value *value_cursor = entry_head->values;
+	printf("[");
+	while(value_cursor)
+	{
+		print("%d", entry_head->value);
+		value_cursor = value_cursor->next;
+	}
+	printf("]");
+}
+
+void command_get(command_struct *command)
+{
+	entry *found = find_entry_by_key(command->args_malloc_ptr[1]);
+	if(!found)
+	{
+		printf("no such key");
+		return;
+	}
+	print_values_in_entry(entry_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
 
 // most recently added
-entry* entry_head = NULL;
-snapshot* snapshot_head = NULL;
 
 
 
 int main(void) {
-
-	entry_head = calloc(sizeof(entry), 1);
-	snapshot_head = calloc(sizeof(snapshot), 1);
+	entry* entry_head = calloc(sizeof(entry), 1);
+	snapshot* snapshot_head = calloc(sizeof(snapshot), 1);
 
 	char buffer[MAX_LINE_LENGTH];
 
@@ -193,7 +217,8 @@ int main(void) {
 
 		if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
-
+			printf("bye");
+			return 0;
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "help") == 0)
 		{
@@ -264,7 +289,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "get") == 0)
 		{
-
+			command_get(command);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "del") == 0)
 		{

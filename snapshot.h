@@ -136,12 +136,7 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		entry_ptr = calloc(sizeof(entry), 1);
-		value *entry_ptr_values_head = calloc(sizeof(value), 1);
-		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
-		entry_ptr->values = entry_ptr_values_head;
-		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
-		append_entry_to_entry_head(entry_ptr, entry_head);
+		printf("entry does not exist (append_entry_values_by_key)");
 	}
 	while(values)
 	{
@@ -150,6 +145,20 @@ void append_entry_values_by_key(char *key, char *values, entry *entry_head)
 		values = (next_space ? next_space : strchr(values+1, '\n'));
 	};
 	printf("success append values\n");
+}
+
+void create_entry(char *key, entry *entry_head)
+{
+	entry *entry_ptr = find_entry_by_key(key, entry_head);
+	if(!entry_ptr)
+	{
+		entry_ptr = calloc(sizeof(entry), 1);
+		value *entry_ptr_values_head = calloc(sizeof(value), 1);
+		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
+		entry_ptr->values = entry_ptr_values_head;
+		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
+		append_entry_to_entry_head(entry_ptr, entry_head);
+	}
 }
 
 void delete_entry_values_by_key(char *key, entry *entry_head)
