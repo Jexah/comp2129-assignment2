@@ -583,7 +583,7 @@ STATUS print_minimum_value_by_entry(entry *target_entry)
 	value *cursor = target_entry->values->next;
 	while(cursor)
 	{
-		if(cursor->value < lowest || first == 1)
+		if(first == 1 || cursor->value < lowest)
 		{
 			lowest = cursor->value;
 		}
