@@ -480,7 +480,7 @@ STATUS print_value_index_by_entry(int index, entry *target_entry)
 		return INDEX_OUT_OF_RANGE;
 	}
 	DEBUG("print_value_index_by_entry-> OK\n");
-	printf("%d", target_value->value);
+	printf("%d\n", target_value->value);
 	return OK;
 }
 
