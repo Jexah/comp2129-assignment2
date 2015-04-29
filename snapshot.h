@@ -9,7 +9,7 @@ typedef struct command_struct
 	char *args_malloc_ptr[3];
 } command_struct;
 
-typedef enum STATUS { OK, NO_KEY, NO_KEYS, INDEX_OUT_OF_RANGE, NO_ENTRIES, NO_SNAPSHOTS, NO_ENTRY, NO_SNAPSHOT, MALLOC_FAILED } STATUS;
+typedef enum STATUS { OK, NO_KEY, NO_KEYS, INDEX_OUT_OF_RANGE, NO_ENTRIES, NO_SNAPSHOTS, NO_ENTRY, NO_SNAPSHOT, MALLOC_FAILED, UNKNOWN } STATUS;
 
 typedef struct value value;
 typedef struct entry entry;

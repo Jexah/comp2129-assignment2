@@ -1042,6 +1042,34 @@ STATUS restore_snapshot_by_id(int id, snapshot *snapshot_head, entry *entry_head
 	return restore_snapshot_by_snapshot(found, entry_head);
 }
 
+STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_head)
+{
+	int current = 1;
+	STATUS restore_snapshot_status = restore_snapshot_by_id(id, snapshot_head, entry_head);
+	if(restore_snapshot_head != OK)
+	{
+		DEBUG("rollback_to_snapshot_id->restore_snapshot_head !OK, NO_SNAPSHOT");
+		return restore_snapshot_head;
+	}
+	snapshot *cursor = snapshot_head->next;
+	while(cursor)
+	{
+		if(current == id)
+		{
+			return OK;
+		}
+		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(current, snapshot_head);
+		if(delete_snapshot_status != OK)
+		{
+			DEBUG("rollback_to_snapshot_id->delete_snapshot_status !OK");
+			return delete_snapshot_status;
+		}
+		current++;
+		cursor = cursor->next;
+	}
+	return UNKNOWN;
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1677,6 +1705,11 @@ void checkout_command(command_struct *command, snapshot *snapshot_head, entry *e
 	}
 }
 
+void rollback_command(command_struct *command, snapshot *snapshot_head, entry *entry_head)
+{
+	rollback_to_snapshot_id(atoi(command->args_malloc_ptr[1]), snapshot_head, entry_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1756,7 +1789,7 @@ int main(void)
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "rollback") == 0)
 		{
-
+			rollback_command(command, snapshot_head, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "checkout") == 0)
 		{
