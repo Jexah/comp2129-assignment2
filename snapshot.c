@@ -281,7 +281,7 @@ STATUS get_new_entry(char *key, entry **new_entry_ptr)
 {
 	*new_entry_ptr = calloc(sizeof(entry), 1);
 	value *entry_ptr_values_head = calloc(sizeof(value), 1);
-	*new_entry_ptr->values = entry_ptr_values_head;
+	(*new_entry_ptr)->values = entry_ptr_values_head;
 	strncpy((*new_entry_ptr)->key, key, MAX_KEY_LENGTH);
 	return OK;
 }
