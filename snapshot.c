@@ -907,6 +907,30 @@ void pluck_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void pop_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS print_and_delete_value_status = print_and_remove_index_by_key(1, command->args_malloc_ptr[1], entry_head);
+	switch(print_and_delete_value_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("nil\n");
+			break;
+		default:
+			printf("Whoops! (pluck_command: %d)\n", print_and_delete_value_status);
+			break;
+	}
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
@@ -973,7 +997,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pop") == 0)
 		{
-
+			pop_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "drop") == 0)
 		{
