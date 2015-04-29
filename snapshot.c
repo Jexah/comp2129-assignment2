@@ -532,6 +532,23 @@ STATUS print_minimum_value_by_entry(entry *target_entry)
 	return OK;
 }
 
+STATUS print_minimum_value_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("print_minimum_value_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_min_value_status = print_minimum_value_by_entry(found);
+	if(print_min_value_status != OK)
+	{
+		DEBUG("print_minimum_value_by_key->print_min_value_status !OK\n");
+		return print_min_value_status;
+	}
+	return OK;
+}
+
 STATUS print_maximum_value_by_entry(entry *target_entry)
 {
 	int highest;
@@ -556,23 +573,6 @@ STATUS print_maximum_value_by_entry(entry *target_entry)
 	return OK;
 }
 
-STATUS print_minimum_value_by_key(char *key, entry *entry_head)
-{
-	entry *found = find_entry_by_key(key, entry_head);
-	if(!found)
-	{
-		DEBUG("print_minimum_value_by_key-> !found\n");
-		return NO_KEY;
-	}
-	STATUS print_min_value_status = print_minimum_value_by_entry(found);
-	if(print_min_value_status != OK)
-	{
-		DEBUG("print_minimum_value_by_key->print_min_value_status !OK\n");
-		return print_min_value_status;
-	}
-	return OK;
-}
-
 STATUS print_maximum_value_by_key(char *key, entry *entry_head)
 {
 	entry *found = find_entry_by_key(key, entry_head);
@@ -586,6 +586,37 @@ STATUS print_maximum_value_by_key(char *key, entry *entry_head)
 	{
 		DEBUG("print_maximum_value_by_key->print_max_value_status !OK\n");
 		return print_max_value_status;
+	}
+	return OK;
+}
+
+STATUS print_sum_of_values_by_entry(entry *target_entry)
+{
+	int total = 0;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		total += cursor->value;
+		cursor = cursor->next;
+	}
+	printf("%d", total);
+	DEBUG("print_sum_of_values_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS print_sum_of_values_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("print_sum_of_values_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_sum_status = print_sum_of_values_by_entry(found);
+	if(print_sum_status != OK)
+	{
+		DEBUG("print_sum_of_values_by_key->print_max_value_status !OK\n");
+		return print_sum_status;
 	}
 	return OK;
 }
@@ -1013,7 +1044,7 @@ void pop_command(command_struct *command, entry *entry_head)
 			printf("nil\n");
 			break;
 		default:
-			printf("Whoops! (pluck_command: %d)\n", print_and_delete_value_status);
+			printf("Whoops! (pop_command: %d)\n", print_and_delete_value_status);
 			break;
 	}
 }
@@ -1037,7 +1068,7 @@ void min_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (append_command: %d)", print_min_value_status);
+			printf("Whoops! (min_command: %d)", print_min_value_status);
 			break;
 	}
 }
@@ -1061,7 +1092,31 @@ void max_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (append_command: %d)", print_max_value_status);
+			printf("Whoops! (max_command: %d)", print_max_value_status);
+			break;
+	}
+}
+
+void sum_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS print_sum_status = print_sum_of_values(command->args_malloc_ptr[1], entry_head);
+	switch(print_sum_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("index out of range\n");
+			break;
+		default:
+			printf("Whoops! (sum_command: %d)", print_sum_status);
 			break;
 	}
 }
