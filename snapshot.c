@@ -954,7 +954,7 @@ STATUS delete_all_snapshots(snapshot *snapshot_head)
 	while(cursor)
 	{
 		snapshot *next = cursor->next;
-		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor);
+		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor, snapshot_head);
 		if(delete_snapshot_status != OK)
 		{
 			DEBUG("delete_all_snapshots->delete_snapshot_status !OK");
@@ -962,7 +962,7 @@ STATUS delete_all_snapshots(snapshot *snapshot_head)
 		}
 		cursor = next;
 	}
-	return delete_snapshot_by_snapshot(snapshot_head);
+	return delete_snapshot_by_snapshot(snapshot_head, snapshot_head);
 }
 
 // //////////////////////////////////////////////////////////////
