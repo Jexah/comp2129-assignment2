@@ -624,7 +624,7 @@ STATUS print_maximum_value_by_entry(entry *target_entry)
 	value *cursor = target_entry->values->next;
 	while(cursor)
 	{
-		if(cursor->value > highest || first == 1)
+		if(first == 1 || cursor->value > highest)
 		{
 			highest = cursor->value;
 		}
