@@ -1287,7 +1287,7 @@ void uniq_command(command_struct *command, entry *entry_head)
 			printf("no such key\n");
 			break;
 		default:
-			printf("Whoops! (uniq_command: %d)", rev_status);
+			printf("Whoops! (uniq_command: %d)", uniq_status);
 			break;
 	}
 }
