@@ -1425,7 +1425,7 @@ void sort_command(command_struct *command, entry *entry_head)
 	}
 }
 
-void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head, *latest_snapshotID)
+void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head, int *latest_snapshotID)
 {
 	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
 	new_snapshot->entries = calloc(sizeof(entry), 1);
