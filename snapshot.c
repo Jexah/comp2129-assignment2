@@ -129,11 +129,14 @@ STATUS delete_entry_values(entry *target_entry)
 
 STATUS delete_entry(entry *target_entry)
 {
+	if(!target_entry)
+	{
+		DEBUG("delete_entry-> !target_entry, OK\n");
+		return OK;
+	}
 	if(target_entry->next) target_entry->next->prev = target_entry->prev;
 	if(target_entry->prev) target_entry->prev->next = target_entry->next;
     STATUS delete_status = delete_entry_values(target_entry);
-	DEBUG("before");
-	DEBUG("AFTER");
 	if(delete_status != OK)
 	{
 		DEBUG("delete_entry->delete_status !OK\n");
