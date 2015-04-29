@@ -140,9 +140,9 @@ STATUS delete_entry(entry *target_entry)
 	}
 	if(target_entry->prev)
 	{
-		printf("yolo\n");
 		target_entry->prev->next = target_entry->next;
 	}
+	printf("yolo: '%s'\n", target_entry->key);
     STATUS delete_status = delete_entry_values(target_entry);
 	if(delete_status != OK)
 	{
@@ -846,6 +846,7 @@ STATUS push_entry_on_snapshot(entry *new_entry, snapshot *target_snapshot)
 	entry *new_second = target_snapshot->entries->next;
 	target_snapshot->entries->next = new_entry;
 	new_entry->next = new_second;
+	new_entry->prev = target_snapshot->entries;
 	if(new_second)
 	{
 		new_second->prev = new_entry;
