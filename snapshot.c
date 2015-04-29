@@ -991,7 +991,7 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapsho
 		DEBUG("restore_snapshot_by_snapshot->free_entries_status !OK");
 		return free_entries_status;
 	}
-	entry *snapshot_entry_cursor = snapshot->entries->next;
+	entry *snapshot_entry_cursor = snapshot_head->entries->next;
 	entry *entry_head_cursor = entry_head->next;
 	while(snapshot_entry_cursor)
 	{
