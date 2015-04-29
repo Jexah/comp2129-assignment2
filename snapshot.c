@@ -265,7 +265,7 @@ void print_values_in_entry(entry *entry_head)
 	printf("[");
 	while(value_cursor)
 	{
-		print_value_by_value(value_cursor);
+		printf("%d", value_cursor->value);
 		value_cursor = value_cursor->next;
 		if(value_cursor)
 		{
@@ -277,7 +277,7 @@ void print_values_in_entry(entry *entry_head)
 
 STATUS print_value_by_value(value *target_value)
 {
-	printf("%d", target_value->value);
+	printf("%d\n", target_value->value);
 	return OK;
 }
 
@@ -1439,7 +1439,6 @@ void pick_command(command_struct *command, entry *entry_head)
 	switch(print_value_status)
 	{
 		case OK:
-			printf("\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
@@ -1488,7 +1487,6 @@ void pop_command(command_struct *command, entry *entry_head)
 	switch(print_and_delete_value_status)
 	{
 		case OK:
-			printf("\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
