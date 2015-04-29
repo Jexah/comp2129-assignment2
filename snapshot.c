@@ -658,14 +658,20 @@ STATUS rev_values_by_entry(entry *target_entry)
 	value *cursor = target_entry->values->next;
 	while(cursor)
 	{
-		if(!cursor->next)
-		{
-			target_entry->values->next = cursor;
-		}
-
 		value *next = cursor->next;
+		value *prev = cursor->prev;
 		cursor->next = cursor->prev;
 		cursor->prev = next;
+
+		if(prev == target_entry->values)
+		{
+			cursor->next = null;
+		}
+		if(!next)
+		{
+			target_entry->values->next = cursor;
+			cursor->prev = target_entry->values;
+		}
 		cursor = next;
 	}
 	DEBUG("rev_values_by_entry-> OK\n");
