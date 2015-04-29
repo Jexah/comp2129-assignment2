@@ -1530,7 +1530,7 @@ int main(void) {
 				value *value_cursor = entry_cursor->values->next;
 				while(value_cursor)
 				{
-					entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key);
+					entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key, snapshot->entries);
 					STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
 					if(get_new_value_status != OK)
 					{
