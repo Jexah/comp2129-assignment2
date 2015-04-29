@@ -835,10 +835,10 @@ STATUS push_key_on_snapshot(char *key, snapshot *target_snapshot)
 {
 	entry *new_entry;
 	STATUS get_new_entry_status = get_new_entry(key, &new_entry);
-	if(get_new_value_status != OK)
+	if(get_new_entry_status != OK)
 	{
-		DEBUG("push_key_on_snapshot->get_new_value_status !OK\n");
-		return get_new_value_status;
+		DEBUG("push_key_on_snapshot->get_new_entry_status !OK\n");
+		return get_new_entry_status;
 	}
 	return push_entry_on_snapshot(new_entry, target_snapshot);
 }
