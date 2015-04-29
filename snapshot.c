@@ -313,15 +313,15 @@ STATUS get_new_entry(char *key, entry **new_entry_ptr)
 	return OK;
 }
 
-STATUS push_key_on_entry_head(char *key, entry **new_entry_ptr)
+STATUS append_key_to_entry_head(char *key, entry **new_entry_ptr)
 {
 	STATUS get_new_entry_status = get_new_entry(key, new_entry_ptr);
 	if(get_new_entry_status != OK)
 	{
-		DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
+		DEBUG("append_key_ton_entry_head->get_new_entry_status !OK\n");
 		return get_new_entry_status;
 	}
-	DEBUG("create_entry_if_not_exist-> OK\n");
+	DEBUG("append_key_ton_entry_head-> OK\n");
 	return OK;
 }
 
@@ -983,6 +983,64 @@ STATUS free_all(snapshot *snapshot_head, entry *entry_head)
 	return free_entries_and_head(entry_head);
 }
 
+STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot_head, entry *entry_head)
+{
+	STATUS free_entries_status = free_entries_from_head(entry_head);
+	if(free_entries_status != OK)
+	{
+		DEBUG("restore_snapshot_by_snapshot->free_entries_status !OK");
+		return free_entries_status;
+	}
+	entry *snapshot_entry_cursor = snapshot->entries->next;
+	entry *entry_head_cursor = entry_head->next;
+	while(snapshot_entry_cursor)
+	{
+		STATUS get_new_entry_status = get_new_entry(snapshot_entry_cursor->key, &entry_head_cursor);
+		if(get_new_entry_status != OK)
+		{
+			DEBUG("restore_snapshot_by_snapshot->get_new_entry_status !OK");
+			return get_new_entry_status;
+		}
+		STATUS append_entry_status = append_entry_to_entry_head(entry_head_cursor, entry_head);
+		if(append_entry_status != OK)
+		{
+			DEBUG("restore_snapshot_by_snapshot->append_entry_status !OK");
+			return append_entry_status;
+		}
+		value *snapshot_value_cursor = snapshot_entry_cursor->values->next;
+		value *value_head_cursor = entry_head_cursor->values->next;
+		while(snapshot_value_cursor)
+		{
+			STATUS get_new_value_status = get_new_value(snapshot_value_cursor->value, &value_head_cursor);
+			if(get_new_value_status != OK)
+			{
+				DEBUG("restore_snapshot_by_snapshot->get_new_value_status !OK");
+				return get_new_value_status;
+			}
+			STATUS append_value_status = append_value_to_entry(value_head_cursor, entry_head_cursor);
+			if(append_value_status != OK)
+			{
+				DEBUG("restore_snapshot_by_snapshot->append_value_status !OK");
+				return append_value_status;
+			}
+		}
+		snapshot_entry_cursor = snapshot_entry_cursor->next;
+		entry_head_cursor = entry_head_cursor->next;
+	}
+	return OK;
+}
+
+STATUS restore_snapshot_by_id(int id, snapshot *snapshot_head, entry *entry_head)
+{
+	snapshot *found = find_snapshot_by_id(id, snapshot_head);
+	if(!found)
+	{
+		DEBUG("restore_snapshot_by_id-> !found, NO_SNAPSHOT");
+		return NO_SNAPSHOT;
+	}
+	return restore_snapshot_by_snapshot(found, snapshot_head, entry_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1601,12 +1659,30 @@ void bye_command(snapshot *snapshot_head, entry *entry_head)
 	free_all(snapshot_head, entry_head);
 }
 
+void checkout_command(int id, snapshot *snapshot_head, entry *entry_head)
+{
+	STATUS checkout_snapshot_status = restore_snapshot_by_id(id, snapshot_head, entry_head);
+	switch(checkout_snapshot_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case NO_SNAPSHOT:
+			printf("no such snapshot\n");
+			break;
+		default:
+			printf("Whoops! (checkout_snapshot_status: %d)", checkout_snapshot_status);
+			break;
+	}
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
 
 
-int main(void) {
+int main(void)
+{
 	entry* entry_head = calloc(sizeof(entry), 1);
 	snapshot* snapshot_head = calloc(sizeof(snapshot), 1);
 
@@ -1683,7 +1759,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "checkout") == 0)
 		{
-
+			checkout_command(command, snapshot_head, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
