@@ -661,11 +661,12 @@ STATUS rev_values_by_entry(entry *target_entry)
 		value *next = cursor->next;
 		cursor->next = cursor->prev;
 		cursor->prev = next;
-		cursor = next;
 		if(!cursor->next)
 		{
 			target_entry->values = cursor;
+			break;
 		}
+		cursor = next;
 	}
 	DEBUG("rev_values_by_entry-> OK\n");
 	return OK;
