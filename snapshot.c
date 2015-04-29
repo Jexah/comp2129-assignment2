@@ -1055,6 +1055,7 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 	snapshot *cursor = snapshot_head->next;
 	while(cursor)
 	{
+		printf("snapshotid: '%d' deleted", cursor->id);
 		snapshot *next = cursor->next;
 		if(current == id)
 		{
