@@ -85,6 +85,7 @@ STATUS delete_value(value *target_value)
 		target_value->prev->next = target_value->next;
 	}
 	free(target_value);
+	return OK;
 }
 
 STATUS delete_entry_values(entry *target_entry)

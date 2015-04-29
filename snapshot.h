@@ -72,6 +72,8 @@ STATUS print_value_index_by_entry(int, entry *);
 STATUS print_value_index_by_key(int, char *, entry *);
 STATUS print_and_remove_index_by_entry(int, entry *);
 STATUS print_and_remove_index_by_key(int, char *, entry *);
+STATUS delete_value_index_by_entry(int, entry *);
+STATUS delete_value_index_by_key(int, char *, entry *);
 
 // Options
 void get_command(command_struct *, entry *);
