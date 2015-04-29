@@ -142,7 +142,6 @@ STATUS delete_entry(entry *target_entry)
 	{
 		target_entry->prev->next = target_entry->next;
 	}
-	printf("yolo: '%s'\n", target_entry->key);
     STATUS delete_status = delete_entry_values(target_entry);
 	if(delete_status != OK)
 	{
@@ -949,6 +948,23 @@ STATUS delete_snapshot_by_id(int id, snapshot *snapshot_head)
 	return delete_snapshot_by_snapshot(found, snapshot_head);
 }
 
+STATUS delete_all_snapshots(snapshot *snapshot_head)
+{
+	snapshot *cursor = snapshot_head->next;
+	while(cursor)
+	{
+		snapshot *next = cursor->next;
+		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor);
+		if(delete_snapshot_status != OK)
+		{
+			DEBUG("delete_all_snapshots->delete_snapshot_status !OK");
+			return delete_snapshot_status;
+		}
+		cursor = next;
+	}
+	return delete_snapshot_by_snapshot(snapshot_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1562,6 +1578,17 @@ void drop_command(command_struct *command, snapshot *snapshot_head)
 	}
 }
 
+void bye_command(snapshot *snapshot_head, entry *entry_head)
+{
+	STATUS delete_snapshots_status = delete_all_snapshots(snapshot_head);
+	if(delete_snapshots_status != OK)
+	{
+		DEBUG("bye_command->delete_snapshots_status !OK");
+		return delete_snapshots_status;
+	}
+	return free_entries_and_head(entry_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1585,6 +1612,7 @@ int main(void) {
 
 		if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
+			bye_command(snapshot_head, entry_head);
 			printf("bye");
 			return 0;
 		}
