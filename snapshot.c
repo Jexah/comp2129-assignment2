@@ -1058,7 +1058,7 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 		{
 			return OK;
 		}
-		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(current, snapshot_head);
+		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor, snapshot_head);
 		if(delete_snapshot_status != OK)
 		{
 			DEBUG("rollback_to_snapshot_id->delete_snapshot_status !OK");
