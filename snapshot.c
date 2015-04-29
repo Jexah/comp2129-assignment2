@@ -303,7 +303,7 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		STATUS get_new_entry_status = get_new_entry_with_values(key, entry_ptr);
+		STATUS get_new_entry_status = get_new_entry(key, entry_ptr);
 		if(get_new_entry_status != OK)
 		{
 			DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
