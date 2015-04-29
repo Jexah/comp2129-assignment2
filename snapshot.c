@@ -403,7 +403,7 @@ STATUS print_value_index_by_entry(int index, entry *target_entry)
 	value *target_value = get_value_from_entry_by_index(index, target_entry);
 	if(!target_value)
 	{
-		DEBUG("print_value_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
+		DEBUG("print_value_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE\n");
 		return INDEX_OUT_OF_RANGE;
 	}
 	DEBUG("print_value_index_by_entry-> OK\n");
@@ -433,7 +433,7 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 	value *target_value = get_value_from_entry_by_index(index, target_entry);
 	if(!target_value)
 	{
-		DEBUG("print_and_remove_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
+		DEBUG("print_and_remove_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE\n");
 		return INDEX_OUT_OF_RANGE;
 	}
 	STATUS print_value_status = print_value_by_value(target_value);
@@ -802,6 +802,11 @@ void list_command(command_struct *command, entry *entry_head, snapshot *snapshot
 
 void set_command(command_struct *command, entry *entry_head)
 {
+	if(!command->args_malloc_ptr[1] || !command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	STATUS set_entry_values_status = set_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(set_entry_values_status)
 	{
@@ -816,6 +821,11 @@ void set_command(command_struct *command, entry *entry_head)
 
 void push_command(command_struct *command, entry *entry_head)
 {
+	if(!command->args_malloc_ptr[1] || !command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	STATUS push_ints_status = push_ints_on_entry_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(push_ints_status)
 	{
@@ -830,6 +840,11 @@ void push_command(command_struct *command, entry *entry_head)
 
 void append_command(command_struct *command, entry *entry_head)
 {
+	if(!command->args_malloc_ptr[1] || !command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	STATUS append_ints_status = append_entry_values_by_key(command->args_malloc_ptr[1], command->args_malloc_ptr[2], entry_head);
 	switch(append_ints_status)
 	{
@@ -847,6 +862,11 @@ void append_command(command_struct *command, entry *entry_head)
 
 void pick_command(command_struct *command, entry *entry_head)
 {
+	if(!command->args_malloc_ptr[1] || !command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	STATUS print_value_status = print_value_index_by_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
 	switch(print_value_status)
 	{
@@ -859,13 +879,18 @@ void pick_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (pick_command: %d)", print_value_status);
+			printf("Whoops! (pick_command: %d)\n", print_value_status);
 			break;
 	}
 }
 
 void pluck_command(command_struct *command, entry *entry_head)
 {
+	if(!command->args_malloc_ptr[1] || !command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	STATUS print_and_delete_value_status = print_and_remove_index_by_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
 	switch(print_and_delete_value_status)
 	{
