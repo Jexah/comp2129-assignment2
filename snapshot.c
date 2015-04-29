@@ -615,8 +615,39 @@ STATUS print_sum_of_values_by_key(char *key, entry *entry_head)
 	STATUS print_sum_status = print_sum_of_values_by_entry(found);
 	if(print_sum_status != OK)
 	{
-		DEBUG("print_sum_of_values_by_key->print_max_value_status !OK\n");
+		DEBUG("print_sum_of_values_by_key->print_sum_status !OK\n");
 		return print_sum_status;
+	}
+	return OK;
+}
+
+STATUS print_len_of_values_by_entry(entry *target_entry)
+{
+	int total = 0;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		total++;
+		cursor = cursor->next;
+	}
+	printf("%d", total);
+	DEBUG("print_len_of_values_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS print_len_of_values_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("print_len_of_values_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_len_status = print_len_of_values_by_entry(found);
+	if(print_len_status != OK)
+	{
+		DEBUG("print_len_of_values_by_key->print_sum_status !OK\n");
+		return print_len_status;
 	}
 	return OK;
 }
@@ -1112,14 +1143,34 @@ void sum_command(command_struct *command, entry *entry_head)
 		case NO_KEY:
 			printf("no such key\n");
 			break;
-		case INDEX_OUT_OF_RANGE:
-			printf("index out of range\n");
-			break;
 		default:
 			printf("Whoops! (sum_command: %d)", print_sum_status);
 			break;
 	}
 }
+
+void len_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS print_len_status = print_len_of_values_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(print_len_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		default:
+			printf("Whoops! (len_command: %d)", print_len_status);
+			break;
+	}
+}
+
+
 
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
@@ -1219,7 +1270,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "len") == 0)
 		{
-
+			len_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "rev") == 0)
 		{
