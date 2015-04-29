@@ -1081,7 +1081,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
-
+			min_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "max") == 0)
 		{
