@@ -779,7 +779,10 @@ STATUS uniq_values_by_entry(entry *target_entry)
 		{
 			delete_value(cursor);
 		}
-		prev_value = cursor->value;
+		else
+		{
+			prev_value = cursor->value;
+		}
 		cursor = next;
 		first = 0;
 		continue;
