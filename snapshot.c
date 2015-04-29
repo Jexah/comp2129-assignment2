@@ -461,12 +461,13 @@ STATUS print_and_remove_index_by_key(int index, char *key, entry *entry_head)
 		DEBUG("print_value_index_by_key-> !found\n");
 		return NO_KEY;
 	}
-	STATUS print_and_remove_index = print_and_remove_index_by_entry(index, found);
-	if(print_and_remove_index != OK)
+	STATUS print_and_remove_index_status = print_and_remove_index_by_entry(index, found);
+	if(print_and_remove_index_status != OK)
 	{
 		DEBUG("print_value_index_by_key->print_and_remove_index !OK\n");
-		return print_and_remove_index;
+		return print_and_remove_index_status;
 	}
+	return OK;
 }
 
 STATUS delete_value_index_by_entry(int index, entry *target_entry)
