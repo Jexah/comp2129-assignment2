@@ -288,7 +288,7 @@ STATUS get_new_entry(char *key, entry **new_entry_ptr)
 
 STATUS push_key_on_entry_head(char *key, entry **new_entry_ptr)
 {
-	STATUS get_new_entry_status = get_new_entry(key, &new_entry_ptr);
+	STATUS get_new_entry_status = get_new_entry(key, new_entry_ptr);
 	if(get_new_entry_status != OK)
 	{
 		DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
