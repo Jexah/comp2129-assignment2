@@ -843,6 +843,42 @@ STATUS push_key_on_snapshot(char *key, snapshot *target_snapshot)
 	return push_entry_on_snapshot(new_entry, target_snapshot);
 }
 
+STATUS take_snapshot(snapshot *snapshot_head, entry *entry_head, int *latest_snapshotID)
+{
+	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
+	new_snapshot->entries = calloc(sizeof(entry), 1);
+	new_snapshot->id = (*latest_snapshotID)++;
+
+	snapshot *snapshot_new_second = snapshot_head->next;
+
+	entry *entry_cursor = entry_head->next;
+	while(entry_cursor)
+	{
+		STATUS get_new_entry_status = push_key_on_snapshot(entry_cursor->key, new_snapshot);
+		if(get_new_entry_status != OK)
+		{
+			DEBUG("take_snapshot->get_new_entry_status !OK\n");
+			return get_new_entry_status;
+		}
+		value *value_cursor = entry_cursor->values->next;
+		while(value_cursor)
+		{
+			entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key, new_snapshot->entries);
+			STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
+			if(get_new_value_status != OK)
+			{
+				DEBUG("take_snapshot->get_new_value_status !OK\n");
+				return get_new_value_status;
+			}
+			value_cursor = value_cursor->next;
+		}
+		entry_cursor = entry_cursor->next;
+	}
+	DEBUG("take_snapshot-> OK\n");
+	return OK;
+}
+
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1425,40 +1461,18 @@ void sort_command(command_struct *command, entry *entry_head)
 	}
 }
 
-void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head, int *latest_snapshotID)
+void snapshot_command(snapshot *snapshot_head, entry *entry_head, int *latest_snapshotID)
 {
-	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
-	new_snapshot->entries = calloc(sizeof(entry), 1);
-	new_snapshot->id = (*latest_snapshotID)++;
-
-	snapshot *snapshot_new_second = snapshot_head->next;
-
-
-	entry *entry_cursor = entry_head->next;
-	while(entry_cursor)
+	STATUS snapshot_status = take_snapshot(snapshot_head, entry_head, latest_snapshotID);
+	switch(snapshot_status)
 	{
-		STATUS get_new_entry_status = push_key_on_snapshot(entry_cursor->key, new_snapshot);
-		if(get_new_entry_status != OK)
-		{
-			DEBUG("snapshot->get_new_entry_status !OK\n");
-			return get_new_entry_status;
-		}
-		value *value_cursor = entry_cursor->values->next;
-		while(value_cursor)
-		{
-			entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key, new_snapshot->entries);
-			STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
-			if(get_new_value_status != OK)
-			{
-				DEBUG("snapshot->get_new_value_status !OK\n");
-				return get_new_value_status;
-			}
-			value_cursor = value_cursor->next;
-		}
-		entry_cursor = entry_cursor->next;
+		case OK:
+			printf("ok\n");
+			break;
+		default:
+			printf("Whoops! (snapshot_command: %d)", snapshot_status);
+			break;
 	}
-	DEBUG("snapshot-> OK\n");
-	return OK;
 }
 
 // //////////////////////////////////////////////////////////////
@@ -1545,7 +1559,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
-			snapshot_command(command, snapshot_head, entry_head, &latest_snapshotID);
+			snapshot_command(snapshot_head, entry_head, &latest_snapshotID);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
