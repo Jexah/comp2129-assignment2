@@ -362,29 +362,40 @@ STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 	return OK;
 }
 
-STATUS print_value_index_from_entry(int index, entry *entry)
+value *get_value_from_entry_by_index(int index, entry *entry)
 {
 	value *cursor = entry->values;
 	for(int i = 0; i < index; ++i)
 	{
 		if(!cursor->next)
 		{
-			DEBUG("print_value_index_from_entry-> !cursor->next, INDEX_OUT_OF_RANGE\n");
-			return INDEX_OUT_OF_RANGE;
+			DEBUG("get_value_from_entry_by_index-> !cursor->next, INDEX_OUT_OF_RANGE\n");
+			return 0;
 		}
 		cursor = cursor->next;
 	}
+	return cursor;
+}
+
+STATUS print_value_index_from_entry(int index, entry *target_entry)
+{
+	value *target_value = get_value_from_entry_by_index(index, target_entry);
+	if(!target_value)
+	{
+		DEBUG("print_value_index_from_entry-> !target_value, INDEX_OUT_OF_RANGE");
+		return INDEX_OUT_OF_RANGE;
+	}
 	DEBUG("print_value_index_from_entry-> OK\n");
-	printf("%d\n", cursor->value);
+	printf("%d\n", target_value->value);
 	return OK;
 }
 
-STATUS print_value_index_from_key(int index, char *key, entry *entry_head)
+STATUS print_value_index_by_key(int index, char *key, entry *entry_head)
 {
 	entry *found = find_entry_by_key(key, entry_head);
 	if(!found)
 	{
-		DEBUG("print_value_index_from_key-> !found\n");
+		DEBUG("print_value_index_by_key-> !found\n");
 		return NO_KEY;
 	}
 	STATUS print_value_status = print_value_index_from_entry(index, found);
@@ -392,9 +403,46 @@ STATUS print_value_index_from_key(int index, char *key, entry *entry_head)
 	{
 		return print_value_status;
 	}
-	DEBUG("print_value_index_from_key-> OK\n");
+	DEBUG("print_value_index_by_key-> OK\n");
 	return OK;
 }
+
+STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
+{
+	value *target_value = get_value_from_entry_by_index(index, target_entry);
+	if(!target_value)
+	{
+		DEBUG("print_and_remove_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
+		return INDEX_OUT_OF_RANGE;
+	}
+	STATUS print_value_status = print_value_index_from_entry(index, target_entry);
+	if(print_value_status != OK)
+	{
+		DEBUG("print_and_remove_index_by_entry->print_value_status !OK");
+		return status;
+	}
+	STATUS delete_value_status = delete_value_index_by_key(index, target_entry);
+	if(delete_value_status != OK)
+	{
+		DEBUG("print_and_remove_index_by_entry->delete_value_status !OK");
+		return status;
+	}
+	DEBUG("print_and_remove_index_by_entry-> OK");
+	return OK;
+}
+
+STATUS print_and_remove_index_by_key(int index, char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("print_value_index_by_key-> !found\n");
+		return NO_KEY;
+	}
+	print_value_index_from_key(index, key, entry_head);
+	delete_value_index_by_key()
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -738,7 +786,7 @@ void append_command(command_struct *command, entry *entry_head)
 
 void pick_command(command_struct *command, entry *entry_head)
 {
-	STATUS print_value_status = print_value_index_from_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
+	STATUS print_value_status = print_value_index_by_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
 	switch(print_value_status)
 	{
 		case OK:
@@ -753,6 +801,11 @@ void pick_command(command_struct *command, entry *entry_head)
 			printf("Whoops! (append_command: %d)", print_value_status);
 			break;
 	}
+}
+
+void pluck_command(command_struct *command, entry *entry_head)
+{
+	pick
 }
 
 // //////////////////////////////////////////////////////////////
@@ -817,7 +870,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pluck") == 0)
 		{
-
+			pluck_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "pop") == 0)
 		{
