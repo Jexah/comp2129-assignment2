@@ -68,8 +68,10 @@ STATUS purge_entry(char *, entry *, snapshot *);
 STATUS push_int_on_entry(int, entry *);
 STATUS push_value_on_entry(value *, entry *);
 STATUS push_ints_on_entry_by_key(char *, char *, entry *);
-STATUS print_value_index_from_entry(int, entry *);
-STATUS print_value_index_from_key(int, char *, entry *);
+STATUS print_value_index_by_entry(int, entry *);
+STATUS print_value_index_by_key(int, char *, entry *);
+STATUS print_and_remove_index_by_entry(int, entry *);
+STATUS print_and_remove_index_by_key(int, char *, entry *);
 
 // Options
 void get_command(command_struct *, entry *);

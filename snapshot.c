@@ -74,6 +74,19 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
     return append_value_to_entry(new_value_ptr, entry_ptr);
 }
 
+STATUS delete_value(value *target_value)
+{
+	if(target_value->next)
+	{
+		target_value->next->prev = target_value->prev;
+	}
+	if(target_value->prev)
+	{
+		target_value->prev->next = target_value->next;
+	}
+	free(target_value);
+}
+
 STATUS delete_entry_values(entry *target_entry)
 {
 	if(!target_entry)
@@ -87,7 +100,7 @@ STATUS delete_entry_values(entry *target_entry)
 		return OK;
 	}
 	value *cursor = target_entry->values->next;
-	while(free(cursor->prev), (cursor = cursor->next));
+	while(delete_value(cursor->prev), (cursor = cursor->next));
 	DEBUG("delete_entry_values-> OK\n");
 	return OK;
 }
@@ -418,16 +431,16 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 	STATUS print_value_status = print_value_index_from_entry(index, target_entry);
 	if(print_value_status != OK)
 	{
-		DEBUG("print_and_remove_index_by_entry->print_value_status !OK");
+		DEBUG("print_and_remove_index_by_entry->print_value_status !OK\n");
 		return print_value_status;
 	}
 	STATUS delete_value_status = delete_value_index_by_key(index, target_entry);
 	if(delete_value_status != OK)
 	{
-		DEBUG("print_and_remove_index_by_entry->delete_value_status !OK");
+		DEBUG("print_and_remove_index_by_entry->delete_value_status !OK\n");
 		return delete_value_status;
 	}
-	DEBUG("print_and_remove_index_by_entry-> OK");
+	DEBUG("print_and_remove_index_by_entry-> OK\n");
 	return OK;
 }
 
@@ -439,8 +452,46 @@ STATUS print_and_remove_index_by_key(int index, char *key, entry *entry_head)
 		DEBUG("print_value_index_by_key-> !found\n");
 		return NO_KEY;
 	}
-	print_value_index_from_key(index, key, entry_head);
-	delete_value_index_by_key()
+	STATUS print_and_remove_index = print_and_remove_index_by_entry(index, found);
+	if(print_and_remove_index != OK)
+	{
+		DEBUG("print_value_index_by_key->print_and_remove_index !OK\n");
+		return print_and_remove_index;
+	}
+}
+
+STATUS delete_value_index_by_entry(int index, entry *target_entry)
+{
+	value *get_value_from_entry_by_index(index, target_entry);
+	if(!value)
+	{
+		DEBUG("delete_value_index_by_entry-> !value, INDEX_OUT_OF_RANGE\n");
+		return INDEX_OUT_OF_RANGE;
+	}
+	STATUS delete_status = delete_value(value);
+	if(delete_status != OK)
+	{
+		DEBUG("delete_value_index_by_entry->delete_status !OK\n");
+		return delete_status;
+	}
+	return OK;
+}
+
+STATUS delete_value_index_by_key(int index, char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("delete_value_index_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS delete_status = delete_value_index_by_entry(index, found);
+	if(delete_status != OK)
+	{
+		DEBUG("delete_value_index_by_entry->delete_status !OK\n");
+		return delete_status;
+	}
+	return OK;
 }
 
 // //////////////////////////////////////////////////////////////
