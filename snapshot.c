@@ -101,7 +101,12 @@ STATUS delete_entry_values(entry *target_entry)
 		return OK;
 	}
 	value *cursor = target_entry->values->next;
-	while(delete_value(cursor->prev), (cursor = cursor->next));
+	while(cursor)
+	{
+		value *next = cursor->next;
+		delete_value(cursor);
+		cursor = next;
+	};
 	DEBUG("delete_entry_values-> OK\n");
 	return OK;
 }
@@ -109,6 +114,7 @@ STATUS delete_entry_values(entry *target_entry)
 STATUS delete_entry(entry *target_entry)
 {
     STATUS delete_status = delete_entry_values(target_entry);
+	free(target_entry->values);
 	if(delete_status != OK)
 	{
 		DEBUG("delete_entry->delete_status !OK\n");
