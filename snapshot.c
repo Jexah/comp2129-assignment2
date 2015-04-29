@@ -1046,10 +1046,10 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 {
 	int current = 1;
 	STATUS restore_snapshot_status = restore_snapshot_by_id(id, snapshot_head, entry_head);
-	if(restore_snapshot_head != OK)
+	if(restore_snapshot_status != OK)
 	{
-		DEBUG("rollback_to_snapshot_id->restore_snapshot_head !OK, NO_SNAPSHOT");
-		return restore_snapshot_head;
+		DEBUG("rollback_to_snapshot_id->restore_snapshot_status !OK, NO_SNAPSHOT");
+		return restore_snapshot_status;
 	}
 	snapshot *cursor = snapshot_head->next;
 	while(cursor)
