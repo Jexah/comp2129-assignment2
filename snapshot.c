@@ -27,6 +27,22 @@ void str_tolower(char *str)
 	}
 }
 
+int compare_values(const void *value1, const void *value2)
+{
+	if(*value == *value2)
+	{
+		return 0;
+	}
+	if(*value1 > *value2)
+	{
+		return -1;
+	}
+	if(*value1 < *value2)
+	{
+		return 1;
+	}
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Helper module    /////////////////////
 // //////////////////////////////////////////////////////////////
@@ -621,7 +637,7 @@ STATUS print_sum_of_values_by_key(char *key, entry *entry_head)
 	return OK;
 }
 
-STATUS print_len_of_values_by_entry(entry *target_entry)
+int get_len_of_values_by_entry(entry *target_entry)
 {
 	int total = 0;
 	value *cursor = target_entry->values->next;
@@ -630,7 +646,12 @@ STATUS print_len_of_values_by_entry(entry *target_entry)
 		total++;
 		cursor = cursor->next;
 	}
-	printf("%d", total);
+	return total;
+}
+
+STATUS print_len_of_values_by_entry(entry *target_entry)
+{
+	printf("%d", get_len_of_values_by_entry(target_entry));
 	DEBUG("print_len_of_values_by_entry-> OK\n");
 	return OK;
 }
@@ -728,6 +749,41 @@ STATUS uniq_values_by_key(char *key, entry *entry_head)
 	{
 		DEBUG("uniq_values_by_key->uniq_status !OK\n");
 		return uniq_status;
+	}
+	return OK;
+}
+
+STATUS sort_values_by_entry(entry *target_entry)
+{
+	int count = get_len_of_values_by_entry(target_entry);
+	int arr[count];
+	int current = 0;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		arr[cursor] = cursor->value;
+		current++;
+		cursor = cursor->next;
+	}
+	qsort(arr, count, sizeof(int), compare_values);
+	printf("DUDE: %d", arr[0]);
+	DEBUG("sort_values_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS sort_values_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("sort_values_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS sort_status = uniq_values_by_entry(found);
+	if(sort_status != OK)
+	{
+		DEBUG("sort_values_by_key->sort_status !OK\n");
+		return sort_status;
 	}
 	return OK;
 }
@@ -1292,6 +1348,26 @@ void uniq_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void sort_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS sort_status = sort_values_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(sort_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		default:
+			printf("Whoops! (sort_command: %d)", sort_status);
+			break;
+	}
+}
 
 
 
@@ -1405,7 +1481,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "sort") == 0)
 		{
-
+			sort_command(command, entry_head);
 		}
 		printf("\n> ");
 		free_command(command);
