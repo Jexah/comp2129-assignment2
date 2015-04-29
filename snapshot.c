@@ -34,11 +34,11 @@ int compare_values(const void *_value1, const void *_value2)
 
 	if(*value1 > *value2)
 	{
-		return -1;
+		return 1;
 	}
 	if(*value1 < *value2)
 	{
-		return 1;
+		return -1;
 	}
 	return 0;
 }
@@ -770,12 +770,10 @@ STATUS sort_values_by_entry(entry *target_entry)
 	cursor = target_entry->values->next;
 	while(cursor)
 	{
-		printf("%d", arr[current]);
 		cursor->value = arr[current];
 		current++;
 		cursor = cursor->next;
 	}
-	printf("DUDE: %d", arr[0]);
 	DEBUG("sort_values_by_entry-> OK\n");
 	return OK;
 }
