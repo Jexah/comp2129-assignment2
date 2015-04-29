@@ -281,23 +281,18 @@ STATUS get_new_entry(char *key, entry **new_entry_ptr)
 {
 	*new_entry_ptr = calloc(sizeof(entry), 1);
 	value *entry_ptr_values_head = calloc(sizeof(value), 1);
+	*new_entry_ptr->values = entry_ptr_values_head;
 	strncpy((*new_entry_ptr)->key, key, MAX_KEY_LENGTH);
 	return OK;
 }
 
-STATUS get_new_entry_with_values(char *key, entry **new_entry_ptr)
+STATUS push_key_on_entry_head(char *key, entry **new_entry_ptr)
 {
-	STATUS get_new_entry_status = get_new_entry(key, &entry_ptr);
+	STATUS get_new_entry_status = get_new_entry(key, &new_entry_ptr);
 	if(get_new_entry_status != OK)
 	{
 		DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
 		return get_new_entry_status;
-	}
-	STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
-	if(append_entry_status != OK)
-	{
-		DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
-		return append_entry_status;
 	}
 	DEBUG("create_entry_if_not_exist-> OK\n");
 	return OK;
@@ -313,6 +308,12 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 		{
 			DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
 			return get_new_entry_status;
+		}
+		STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
+		if(append_entry_status != OK)
+		{
+			DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
+			return append_entry_status;
 		}
 	}
 	DEBUG("create_entry_if_not_exist-> OK\n");
