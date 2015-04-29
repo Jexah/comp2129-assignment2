@@ -449,7 +449,6 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 		return delete_value_status;
 	}
 	DEBUG("print_and_remove_index_by_entry-> OK\n");
-	printf("\n");
 	return OK;
 }
 
@@ -903,7 +902,7 @@ void pluck_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (pluck_command: %d)", print_and_delete_value_status);
+			printf("Whoops! (pluck_command: %d)\n", print_and_delete_value_status);
 			break;
 	}
 }
