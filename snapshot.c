@@ -303,7 +303,7 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		STATUS get_new_entry_status = get_new_entry(key, entry_ptr);
+		STATUS get_new_entry_status = get_new_entry(key, &entry_ptr);
 		if(get_new_entry_status != OK)
 		{
 			DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
@@ -821,7 +821,7 @@ STATUS sort_values_by_key(char *key, entry *entry_head)
 STATUS push_entry_on_snapshot(entry *new_entry, snapshot *target_snapshot)
 {
 	entry *new_second = target_snapshot->entries->next;
-	target_snapshot->values->next = new_entry;
+	target_snapshot->entries->next = new_entry;
 	new_entry->next = new_second;
 	if(new_second)
 	{
