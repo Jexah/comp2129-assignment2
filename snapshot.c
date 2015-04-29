@@ -920,13 +920,14 @@ STATUS delete_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot
 	entry *cursor = target_snapshot->entries->next;
 	while(cursor)
 	{
+		entry *next = cursor->next;
 		STATUS free_entries_status = free_entries_and_head(cursor);
 		if(free_entries_status != OK)
 		{
 			DEBUG("delete_snapshot_by_snapshot->free_entries_status !OK\n");
 			return free_entries_status;
 		}
-		cursor = cursor->next;
+		cursor = next;
 	}
 	STATUS free_entry_head_status = delete_entry(target_snapshot->entries);
 	if(free_entry_head_status != OK)
