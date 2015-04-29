@@ -851,9 +851,12 @@ STATUS take_snapshot(snapshot *snapshot_head, entry *entry_head, int *latest_sna
 	snapshot *snapshot_new_second = snapshot_head->next;
 	snapshot_head->next = new_snapshot;
 	new_snapshot->prev = snapshot_head;
-	snapshot_new_second->prev = new_snapshot;
 	new_snapshot->next = snapshot_new_second;
 
+	if(snapshot_new_second)
+	{
+		snapshot_new_second->prev = new_snapshot;
+	}
 
 	entry *entry_cursor = entry_head->next;
 	while(entry_cursor)
