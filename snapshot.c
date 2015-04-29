@@ -228,7 +228,7 @@ void print_values_in_entry(entry *entry_head)
 
 STATUS print_value_by_value(value *target_value)
 {
-	printf("%s", target_value->value);
+	printf("%d", target_value->value);
 	return OK;
 }
 
