@@ -136,32 +136,11 @@ STATUS delete_entry(entry *target_entry)
 	}
 	if(target_entry->next)
 	{
-		if(target_entry->next->key)
-		{
-			if(target_entry->prev)
-			{
-				if(target_entry->prev->key)
-				{
-					printf("''%s'->prev = '%s'\n", target_entry->next->key, target_entry->prev->key);
-				}
-			}
-		}
-		printf("ASDF\n");
 		target_entry->next->prev = target_entry->prev;
 	}
 	if(target_entry->prev)
 	{
-		if(target_entry->prev->key)
-		{
-			if(target_entry->next)
-			{
-				if(target_entry->next->key)
-				{
-					printf("''%s'->next = '%s'\n", target_entry->prev->key, target_entry->next->key);
-				}
-			}
-		}
-		printf("ASDF2\n");
+		printf("yolo\n");
 		target_entry->prev->next = target_entry->next;
 	}
     STATUS delete_status = delete_entry_values(target_entry);
