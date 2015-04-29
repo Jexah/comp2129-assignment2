@@ -396,10 +396,10 @@ STATUS print_value_index_by_entry(int index, entry *target_entry)
 	value *target_value = get_value_from_entry_by_index(index, target_entry);
 	if(!target_value)
 	{
-		DEBUG("print_value_index_from_entry-> !target_value, INDEX_OUT_OF_RANGE");
+		DEBUG("print_value_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
 		return INDEX_OUT_OF_RANGE;
 	}
-	DEBUG("print_value_index_from_entry-> OK\n");
+	DEBUG("print_value_index_by_entry-> OK\n");
 	printf("%d\n", target_value->value);
 	return OK;
 }
@@ -412,7 +412,7 @@ STATUS print_value_index_by_key(int index, char *key, entry *entry_head)
 		DEBUG("print_value_index_by_key-> !found\n");
 		return NO_KEY;
 	}
-	STATUS print_value_status = print_value_index_from_entry(index, found);
+	STATUS print_value_status = print_value_index_by_entry(index, found);
 	if(print_value_status != OK)
 	{
 		return print_value_status;
@@ -429,7 +429,7 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 		DEBUG("print_and_remove_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
 		return INDEX_OUT_OF_RANGE;
 	}
-	STATUS print_value_status = print_value_index_from_entry(index, target_entry);
+	STATUS print_value_status = print_value_index_by_entry(index, target_entry);
 	if(print_value_status != OK)
 	{
 		DEBUG("print_and_remove_index_by_entry->print_value_status !OK\n");
