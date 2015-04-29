@@ -419,13 +419,13 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 	if(print_value_status != OK)
 	{
 		DEBUG("print_and_remove_index_by_entry->print_value_status !OK");
-		return status;
+		return print_value_status;
 	}
 	STATUS delete_value_status = delete_value_index_by_key(index, target_entry);
 	if(delete_value_status != OK)
 	{
 		DEBUG("print_and_remove_index_by_entry->delete_value_status !OK");
-		return status;
+		return delete_value_status;
 	}
 	DEBUG("print_and_remove_index_by_entry-> OK");
 	return OK;
