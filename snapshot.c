@@ -147,7 +147,7 @@ STATUS delete_entry(entry *target_entry)
 
 STATUS free_entries_from_head(entry *entry_head)
 {
-	entry *cursor = entry_head;
+	entry *cursor = entry_head->next;
 	while(cursor)
 	{
 		entry_head = cursor;
