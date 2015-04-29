@@ -503,6 +503,45 @@ STATUS delete_value_index_by_key(int index, char *key, entry *entry_head)
 	return OK;
 }
 
+STATUS print_minimum_value_by_entry(entry *target_entry)
+{
+	int lowest;
+	int first = 1;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		if(cursor->value < lowest || first == 1)
+		{
+			lowest = cursor->value;
+		}
+		cursor = cursor->next;
+		first = 0;
+	}
+	if(first)
+	{
+		return INDEX_OUT_OF_RANGE;
+	}
+	printf("%d", lowest);
+	return OK;
+}
+
+STATUS print_minimum_value_by_key(entry *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("delete_value_index_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_min_value_status = print_minimum_value_by_entry(found);
+	if(print_min_value_status != OK)
+	{
+		DEBUG("print_minimum_value_by_key->print_min_value_status !OK\n");
+		return print_min_value_status;
+	}
+	return OK;
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -927,6 +966,31 @@ void pop_command(command_struct *command, entry *entry_head)
 			break;
 		default:
 			printf("Whoops! (pluck_command: %d)\n", print_and_delete_value_status);
+			break;
+	}
+}
+
+void min_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS print_min_value_status = print_minimum_value_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(print_min_value_status)
+	{
+		case OK:
+			printf("\n");
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("index out of range\n");
+			break;
+		default:
+			printf("Whoops! (append_command: %d)", print_min_value_status);
 			break;
 	}
 }
