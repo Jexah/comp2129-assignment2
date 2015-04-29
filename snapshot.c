@@ -1001,7 +1001,7 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head
 			DEBUG("restore_snapshot_by_snapshot->get_new_entry_status !OK");
 			return get_new_entry_status;
 		}
-		STATUS append_entry_status = append_entry_to_entry_head(entry_head_cursor, entry_head);
+		STATUS append_entry_status = push_entry_on_entry_head(entry_head_cursor, entry_head);
 		if(append_entry_status != OK)
 		{
 			DEBUG("restore_snapshot_by_snapshot->append_entry_status !OK");
