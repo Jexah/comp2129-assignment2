@@ -149,16 +149,27 @@ STATUS free_entries_from_head(entry *entry_head)
 	while(cursor)
 	{
 		entry_head = cursor;
+		cursor = cursor->next;
 		STATUS delete_status = delete_entry(entry_head);
 		if(delete_status != OK)
 		{
 			DEBUG("free_entries_from_head->delete_status !OK\n");
 			return delete_status;
 		}
-		cursor = cursor->next;
 	}
 	DEBUG("free_entries_from_head-> OK\n");
 	return OK;
+}
+
+STATUS free_entries_and_head(entry *entry_head)
+{
+	STATUS free_entries_status = free_entries_from_head(entry_head);
+	if(free_entries_status != OK)
+	{
+		DEBUG("free_entries_and_head->free_entries_status !OK\n");
+		return free_entries_status;
+	}
+	return delete_entry(entry_head);
 }
 
 STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
@@ -885,6 +896,56 @@ STATUS take_snapshot(snapshot *snapshot_head, entry *entry_head, int *latest_sna
 	return OK;
 }
 
+snapshot *find_snapshot_by_id(int id, snapshot *snapshot_head)
+{
+	snapshot *cursor = snapshot_head->next;
+	while(cursor)
+	{
+		if(cursor->id == id)
+		{
+			return cursor;
+		}
+		cursor = cursor->next;
+	}
+	return 0;
+}
+
+STATUS delete_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot_head)
+{
+	target_snapshot->next->prev = target_snapshot->prev;
+	target_snapshot->prev->next = target_snapshot->next;
+
+	entry *cursor = target_snapshot->entries->next;
+	while(cursor)
+	{
+		STATUS free_entries_status = free_entries_and_head(cursor);
+		if(free_entries_status != OK)
+		{
+			DEBUG("delete_snapshot_by_snapshot->free_entries_status !OK\n");
+			return free_entries_status;
+		}
+		cursor = cursor->next;
+	}
+	STATUS free_entry_head_status = delete_entry(target_snapshot->entries);
+	if(free_entry_head_status != OK)
+	{
+		DEBUG("delete_snapshot_by_snapshot->free_entry_head_status !OK\n");
+		return free_entry_head_status;
+	}
+	free(target_snapshot);
+	return OK;
+}
+
+STATUS delete_snapshot_by_id(int id, snapshot *snapshot_head)
+{
+	snapshot *found = find_snapshot_by_id(id, snapshot_head);
+	if(!found)
+	{
+		DEBUG("delete_snapshot_by_id-> !found, NO_SNAPSHOT");
+		return NO_SNAPSHOT;
+	}
+	return delete_snapshot_by_snapshot(found, snapshot_head);
+}
 
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
@@ -1478,6 +1539,23 @@ void snapshot_command(snapshot *snapshot_head, entry *entry_head, int *latest_sn
 			break;
 		default:
 			printf("Whoops! (snapshot_command: %d)", snapshot_status);
+			break;
+	}
+}
+
+void drop_command(command_struct *command, snapshot *snapshot_head)
+{
+	STATUS delete_snapshot_status = delete_snapshot_by_id(command->args_malloc_ptr[1]);
+	switch(delete_snapshot_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case NO_SNAPSHOT:
+			printf("no such snapshot\n");
+			break;
+		default:
+			printf("Whoops! (delete_snapshot_status: %d)", delete_snapshot_status);
 			break;
 	}
 }
