@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "snapshot.h"
 
-#define TESTING 1
+#define TESTING 0
 #if TESTING
 #define DEBUG(str)(printf("%s", str))
 #else
@@ -1055,7 +1055,6 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 	snapshot *cursor = snapshot_head->next;
 	while(cursor)
 	{
-		printf("snapshotid: '%d' deleted", cursor->id);
 		snapshot *next = cursor->next;
 		if(current == id)
 		{
@@ -1602,6 +1601,7 @@ void rev_command(command_struct *command, entry *entry_head)
 	switch(rev_status)
 	{
 		case OK:
+			printf("ok\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
@@ -1623,6 +1623,7 @@ void uniq_command(command_struct *command, entry *entry_head)
 	switch(uniq_status)
 	{
 		case OK:
+			printf("ok\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
