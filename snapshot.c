@@ -914,8 +914,8 @@ snapshot *find_snapshot_by_id(int id, snapshot *snapshot_head)
 
 STATUS delete_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot_head)
 {
-	target_snapshot->next->prev = target_snapshot->prev;
-	target_snapshot->prev->next = target_snapshot->next;
+	if(target_snapshot->next) target_snapshot->next->prev = target_snapshot->prev;
+	if(target_snapshot->prev) target_snapshot->prev->next = target_snapshot->next;
 
 	entry *cursor = target_snapshot->entries->next;
 	while(cursor)
