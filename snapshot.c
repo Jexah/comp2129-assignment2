@@ -1425,11 +1425,11 @@ void sort_command(command_struct *command, entry *entry_head)
 	}
 }
 
-void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head)
+void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head, *latest_snapshotID)
 {
 	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
 	new_snapshot->entries = calloc(sizeof(entry), 1);
-	new_snapshot->id = latest_snapshotID++;
+	new_snapshot->id = (*latest_snapshotID)++;
 
 	snapshot *snapshot_new_second = snapshot_head->next;
 
@@ -1545,7 +1545,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
-			snapshot_command(command, snapshot_head, entry_head);
+			snapshot_command(command, snapshot_head, entry_head, &latest_snapshotID);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
