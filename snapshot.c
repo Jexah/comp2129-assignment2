@@ -582,7 +582,7 @@ STATUS print_maximum_value_by_key(char *key, entry *entry_head)
 		return NO_KEY;
 	}
 	STATUS print_max_value_status = print_maximum_value_by_entry(found);
-	if(print_min_value_status != OK)
+	if(print_max_value_status != OK)
 	{
 		DEBUG("print_maximum_value_by_key->print_max_value_status !OK\n");
 		return print_max_value_status;
