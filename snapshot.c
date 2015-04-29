@@ -948,7 +948,7 @@ STATUS delete_snapshot_by_id(int id, snapshot *snapshot_head)
 	snapshot *found = find_snapshot_by_id(id, snapshot_head);
 	if(!found)
 	{
-		DEBUG("delete_snapshot_by_id-> !found, NO_SNAPSHOT");
+		DEBUG("delete_snapshot_by_id-> !found, NO_SNAPSHOT\n");
 		return NO_SNAPSHOT;
 	}
 	return delete_snapshot_by_snapshot(found, snapshot_head);
@@ -963,10 +963,10 @@ STATUS delete_all_snapshots(snapshot *snapshot_head)
 		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor, snapshot_head);
 		if(delete_snapshot_status != OK)
 		{
-			DEBUG("delete_all_snapshots->delete_snapshot_status !OK");
+			DEBUG("delete_all_snapshots->delete_snapshot_status !OK\n");
 			return delete_snapshot_status;
 		}
-		DEBUG("delete_all_snapshots->delete_snapshot_status OK");
+		DEBUG("delete_all_snapshots->delete_snapshot_status OK\n");
 		cursor = next;
 	}
 	return delete_snapshot_by_snapshot(snapshot_head, snapshot_head);
@@ -977,10 +977,10 @@ STATUS free_all(snapshot *snapshot_head, entry *entry_head)
 	STATUS delete_snapshots_status = delete_all_snapshots(snapshot_head);
 	if(delete_snapshots_status != OK)
 	{
-		DEBUG("free_all->delete_snapshots_status !OK");
+		DEBUG("free_all->delete_snapshots_status !OK\n");
 		return delete_snapshots_status;
 	}
-	DEBUG("free_all->delete_snapshots_status OK");
+	DEBUG("free_all->delete_snapshots_status OK\n");
 	return free_entries_and_head(entry_head);
 }
 
@@ -989,7 +989,7 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head
 	STATUS free_entries_status = free_entries_from_head(entry_head);
 	if(free_entries_status != OK)
 	{
-		DEBUG("restore_snapshot_by_snapshot->free_entries_status !OK");
+		DEBUG("restore_snapshot_by_snapshot->free_entries_status !OK\n");
 		return free_entries_status;
 	}
 	entry *snapshot_entry_cursor = target_snapshot->entries->next;
@@ -999,13 +999,13 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head
 		STATUS get_new_entry_status = get_new_entry(snapshot_entry_cursor->key, &entry_head_cursor);
 		if(get_new_entry_status != OK)
 		{
-			DEBUG("restore_snapshot_by_snapshot->get_new_entry_status !OK");
+			DEBUG("restore_snapshot_by_snapshot->get_new_entry_status !OK\n");
 			return get_new_entry_status;
 		}
 		STATUS append_entry_status = push_entry_on_entry_head(entry_head_cursor, entry_head);
 		if(append_entry_status != OK)
 		{
-			DEBUG("restore_snapshot_by_snapshot->append_entry_status !OK");
+			DEBUG("restore_snapshot_by_snapshot->append_entry_status !OK\n");
 			return append_entry_status;
 		}
 		value *snapshot_value_cursor = snapshot_entry_cursor->values->next;
@@ -1015,13 +1015,13 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head
 			STATUS get_new_value_status = get_new_value(snapshot_value_cursor->value, &value_head_cursor);
 			if(get_new_value_status != OK)
 			{
-				DEBUG("restore_snapshot_by_snapshot->get_new_value_status !OK");
+				DEBUG("restore_snapshot_by_snapshot->get_new_value_status !OK\n");
 				return get_new_value_status;
 			}
 			STATUS append_value_status = append_value_to_entry(value_head_cursor, entry_head_cursor);
 			if(append_value_status != OK)
 			{
-				DEBUG("restore_snapshot_by_snapshot->append_value_status !OK");
+				DEBUG("restore_snapshot_by_snapshot->append_value_status !OK\n");
 				return append_value_status;
 			}
 			snapshot_value_cursor = snapshot_value_cursor->next;
@@ -1037,7 +1037,7 @@ STATUS restore_snapshot_by_id(int id, snapshot *snapshot_head, entry *entry_head
 	snapshot *found = find_snapshot_by_id(id, snapshot_head);
 	if(!found)
 	{
-		DEBUG("restore_snapshot_by_id-> !found, NO_SNAPSHOT");
+		DEBUG("restore_snapshot_by_id-> !found, NO_SNAPSHOT\n");
 		return NO_SNAPSHOT;
 	}
 	return restore_snapshot_by_snapshot(found, entry_head);
@@ -1049,7 +1049,7 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 	STATUS restore_snapshot_status = restore_snapshot_by_id(id, snapshot_head, entry_head);
 	if(restore_snapshot_status != OK)
 	{
-		DEBUG("rollback_to_snapshot_id->restore_snapshot_status !OK, NO_SNAPSHOT");
+		DEBUG("rollback_to_snapshot_id->restore_snapshot_status !OK, NO_SNAPSHOT\n");
 		return restore_snapshot_status;
 	}
 	snapshot *cursor = snapshot_head->next;
@@ -1064,7 +1064,7 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 		STATUS delete_snapshot_status = delete_snapshot_by_snapshot(cursor, snapshot_head);
 		if(delete_snapshot_status != OK)
 		{
-			DEBUG("rollback_to_snapshot_id->delete_snapshot_status !OK");
+			DEBUG("rollback_to_snapshot_id->delete_snapshot_status !OK\n");
 			return delete_snapshot_status;
 		}
 		current++;
