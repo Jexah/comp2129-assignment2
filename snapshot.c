@@ -20,9 +20,10 @@
 // Helper function to convert a string to lowercase.
 void str_tolower(char *str)
 {
-	while(*str++)
+	while(*str)
 	{
 		*str = tolower(*str);
+		str++
 	}
 }
 
