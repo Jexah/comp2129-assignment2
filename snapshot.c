@@ -472,13 +472,13 @@ STATUS print_and_remove_index_by_key(int index, char *key, entry *entry_head)
 
 STATUS delete_value_index_by_entry(int index, entry *target_entry)
 {
-	value *get_value_from_entry_by_index(index, target_entry);
-	if(!value)
+	value *found = get_value_from_entry_by_index(index, target_entry);
+	if(!found)
 	{
-		DEBUG("delete_value_index_by_entry-> !value, INDEX_OUT_OF_RANGE\n");
+		DEBUG("delete_value_index_by_entry-> !found, INDEX_OUT_OF_RANGE\n");
 		return INDEX_OUT_OF_RANGE;
 	}
-	STATUS delete_status = delete_value(value);
+	STATUS delete_status = delete_value(found);
 	if(delete_status != OK)
 	{
 		DEBUG("delete_value_index_by_entry->delete_status !OK\n");
