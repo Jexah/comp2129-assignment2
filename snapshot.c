@@ -1659,9 +1659,9 @@ void bye_command(snapshot *snapshot_head, entry *entry_head)
 	free_all(snapshot_head, entry_head);
 }
 
-void checkout_command(int id, snapshot *snapshot_head, entry *entry_head)
+void checkout_command(command_struct *command, snapshot *snapshot_head, entry *entry_head)
 {
-	STATUS checkout_snapshot_status = restore_snapshot_by_id(id, snapshot_head, entry_head);
+	STATUS checkout_snapshot_status = restore_snapshot_by_id(atoi(command->args_malloc_ptr[1]), snapshot_head, entry_head);
 	switch(checkout_snapshot_status)
 	{
 		case OK:
