@@ -775,13 +775,14 @@ STATUS uniq_values_by_entry(entry *target_entry)
 	while(cursor)
 	{
 		value *next = cursor->next;
-		if(prev_value == cursor->value && !first)
+		if(!first && prev_value == cursor->value)
 		{
 			delete_value(cursor);
 		}
 		prev_value = cursor->value;
 		cursor = next;
 		first = 0;
+		continue;
 	}
 	DEBUG("uniq_values_by_entry-> OK\n");
 	return OK;
