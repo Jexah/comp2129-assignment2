@@ -983,7 +983,7 @@ STATUS free_all(snapshot *snapshot_head, entry *entry_head)
 	return free_entries_and_head(entry_head);
 }
 
-STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot_head, entry *entry_head)
+STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head)
 {
 	STATUS free_entries_status = free_entries_from_head(entry_head);
 	if(free_entries_status != OK)
@@ -991,7 +991,7 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapsho
 		DEBUG("restore_snapshot_by_snapshot->free_entries_status !OK");
 		return free_entries_status;
 	}
-	entry *snapshot_entry_cursor = snapshot_head->entries->next;
+	entry *snapshot_entry_cursor = target_snapshot->entries->next;
 	entry *entry_head_cursor = entry_head->next;
 	while(snapshot_entry_cursor)
 	{
@@ -1038,7 +1038,7 @@ STATUS restore_snapshot_by_id(int id, snapshot *snapshot_head, entry *entry_head
 		DEBUG("restore_snapshot_by_id-> !found, NO_SNAPSHOT");
 		return NO_SNAPSHOT;
 	}
-	return restore_snapshot_by_snapshot(found, snapshot_head, entry_head);
+	return restore_snapshot_by_snapshot(found, entry_head);
 }
 
 // //////////////////////////////////////////////////////////////
