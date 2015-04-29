@@ -27,9 +27,12 @@ void str_tolower(char *str)
 	}
 }
 
-int compare_values(const void *value1, const void *value2)
+int compare_values(const void *_value1, const void *_value2)
 {
-	if(*value == *value2)
+	int *value1 = _value1;
+	int *value2 = _value2;
+
+	if(*value1 == *value2)
 	{
 		return 0;
 	}
