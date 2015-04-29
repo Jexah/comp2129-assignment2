@@ -525,7 +525,7 @@ STATUS print_minimum_value_by_entry(entry *target_entry)
 	return OK;
 }
 
-STATUS print_minimum_value_by_key(entry *key, entry *entry_head)
+STATUS print_minimum_value_by_key(char *key, entry *entry_head)
 {
 	entry *found = find_entry_by_key(key, entry_head);
 	if(!found)
