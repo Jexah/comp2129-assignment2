@@ -695,6 +695,43 @@ STATUS rev_values_by_key(char *key, entry *entry_head)
 	return OK;
 }
 
+STATUS uniq_values_by_entry(entry *target_entry)
+{
+	int prev_value;
+	int first = 1;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		value *next = cursor->next;
+		if(prev_value == cursor->value && !first)
+		{
+			delete_value(cursor);
+		}
+		prev_value = cursor->value;
+		cursor = next;
+		first = 0;
+	}
+	DEBUG("uniq_values_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS uniq_values_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("uniq_values_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS uniq_status = uniq_values_by_entry(found);
+	if(uniq_status != OK)
+	{
+		DEBUG("uniq_values_by_key->uniq_status !OK\n");
+		return uniq_status;
+	}
+	return OK;
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1234,6 +1271,27 @@ void rev_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void uniq_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS uniq_status = uniq_values_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(rev_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		default:
+			printf("Whoops! (uniq_command: %d)", rev_status);
+			break;
+	}
+}
+
 
 
 
@@ -1343,7 +1401,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "uniq") == 0)
 		{
-
+			uniq_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "sort") == 0)
 		{
