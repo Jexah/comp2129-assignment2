@@ -1104,7 +1104,7 @@ void sum_command(command_struct *command, entry *entry_head)
 		printf("invalid input\n");
 		return;
 	}
-	STATUS print_sum_status = print_sum_of_values(command->args_malloc_ptr[1], entry_head);
+	STATUS print_sum_status = print_sum_of_values_by_key(command->args_malloc_ptr[1], entry_head);
 	switch(print_sum_status)
 	{
 		case OK:
