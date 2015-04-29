@@ -210,12 +210,13 @@ void print_values_in_entry(entry *entry_head)
 	{
 		DEBUG("print_values_in_entry-> !entry_head\n");
 		printf("no such entry\n");
+
 	}
 	value *value_cursor = entry_head->values->next;
 	printf("[");
 	while(value_cursor)
 	{
-		printf("%d", value_cursor->value);
+		print_value_by_value(value_cursor);
 		value_cursor = value_cursor->next;
 		if(value_cursor)
 		{
@@ -223,6 +224,12 @@ void print_values_in_entry(entry *entry_head)
 		}
 	}
 	printf("]\n");
+}
+
+STATUS print_value_by_value(value *target_value)
+{
+	printf("%s", target_value->value);
+	return OK;
 }
 
 STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
@@ -429,19 +436,20 @@ STATUS print_and_remove_index_by_entry(int index, entry *target_entry)
 		DEBUG("print_and_remove_index_by_entry-> !target_value, INDEX_OUT_OF_RANGE");
 		return INDEX_OUT_OF_RANGE;
 	}
-	STATUS print_value_status = print_value_index_by_entry(index, target_entry);
+	STATUS print_value_status = print_value_by_value(target_value);
 	if(print_value_status != OK)
 	{
 		DEBUG("print_and_remove_index_by_entry->print_value_status !OK\n");
 		return print_value_status;
 	}
-	STATUS delete_value_status = delete_value_index_by_key(index, target_entry);
+	STATUS delete_value_status = delete_value(target_value);
 	if(delete_value_status != OK)
 	{
 		DEBUG("print_and_remove_index_by_entry->delete_value_status !OK\n");
 		return delete_value_status;
 	}
 	DEBUG("print_and_remove_index_by_entry-> OK\n");
+	printf("\n");
 	return OK;
 }
 
