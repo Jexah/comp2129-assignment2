@@ -524,9 +524,35 @@ STATUS print_minimum_value_by_entry(entry *target_entry)
 	}
 	if(first)
 	{
+		DEBUG("print_minimum_value_by_entry-> first\n");
 		return INDEX_OUT_OF_RANGE;
 	}
 	printf("%d", lowest);
+	DEBUG("print_minimum_value_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS print_maximum_value_by_entry(entry *target_entry)
+{
+	int highest;
+	int first = 1;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		if(cursor->value > highest || first == 1)
+		{
+			highest = cursor->value;
+		}
+		cursor = cursor->next;
+		first = 0;
+	}
+	if(first)
+	{
+		DEBUG("print_maximum_value_by_entry-> first\n");
+		return INDEX_OUT_OF_RANGE;
+	}
+	printf("%d", highest);
+	DEBUG("print_maximum_value_by_entry-> OK\n");
 	return OK;
 }
 
@@ -535,7 +561,7 @@ STATUS print_minimum_value_by_key(char *key, entry *entry_head)
 	entry *found = find_entry_by_key(key, entry_head);
 	if(!found)
 	{
-		DEBUG("delete_value_index_by_key-> !found\n");
+		DEBUG("print_minimum_value_by_key-> !found\n");
 		return NO_KEY;
 	}
 	STATUS print_min_value_status = print_minimum_value_by_entry(found);
@@ -543,6 +569,23 @@ STATUS print_minimum_value_by_key(char *key, entry *entry_head)
 	{
 		DEBUG("print_minimum_value_by_key->print_min_value_status !OK\n");
 		return print_min_value_status;
+	}
+	return OK;
+}
+
+STATUS print_maximum_value_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("print_maximum_value_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS print_max_value_status = print_maximum_value_by_entry(found);
+	if(print_min_value_status != OK)
+	{
+		DEBUG("print_maximum_value_by_key->print_max_value_status !OK\n");
+		return print_max_value_status;
 	}
 	return OK;
 }
