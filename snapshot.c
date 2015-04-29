@@ -761,11 +761,19 @@ STATUS sort_values_by_entry(entry *target_entry)
 	value *cursor = target_entry->values->next;
 	while(cursor)
 	{
-		arr[cursor] = cursor->value;
+		arr[current] = cursor->value;
 		current++;
 		cursor = cursor->next;
 	}
 	qsort(arr, count, sizeof(int), compare_values);
+	current = 0;
+	cursor = target_entry->values->next;
+	while(cursor)
+	{
+		cursor->value = arr[current];
+		current++;
+		cursor = cursor->next;
+	}
 	printf("DUDE: %d", arr[0]);
 	DEBUG("sort_values_by_entry-> OK\n");
 	return OK;
