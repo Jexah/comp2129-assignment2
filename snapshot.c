@@ -848,8 +848,12 @@ STATUS take_snapshot(snapshot *snapshot_head, entry *entry_head, int *latest_sna
 	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
 	new_snapshot->entries = calloc(sizeof(entry), 1);
 	new_snapshot->id = (*latest_snapshotID)++;
-
 	snapshot *snapshot_new_second = snapshot_head->next;
+	snapshot_head->next = new_snapshot;
+	new_snapshot->prev = snapshot_head;
+	snapshot_new_second->prev = new_snapshot;
+	new_snapshot->next = snapshot_new_second;
+
 
 	entry *entry_cursor = entry_head->next;
 	while(entry_cursor)
