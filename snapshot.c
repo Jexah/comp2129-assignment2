@@ -1545,7 +1545,7 @@ void snapshot_command(snapshot *snapshot_head, entry *entry_head, int *latest_sn
 
 void drop_command(command_struct *command, snapshot *snapshot_head)
 {
-	STATUS delete_snapshot_status = delete_snapshot_by_id(command->args_malloc_ptr[1], snapshot_head);
+	STATUS delete_snapshot_status = delete_snapshot_by_id(atoi(command->args_malloc_ptr[1]), snapshot_head);
 	switch(delete_snapshot_status)
 	{
 		case OK:
