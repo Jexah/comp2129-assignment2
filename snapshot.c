@@ -788,7 +788,7 @@ STATUS sort_values_by_key(char *key, entry *entry_head)
 		DEBUG("sort_values_by_key-> !found\n");
 		return NO_KEY;
 	}
-	STATUS sort_status = uniq_values_by_entry(found);
+	STATUS sort_status = sort_values_by_entry(found);
 	if(sort_status != OK)
 	{
 		DEBUG("sort_values_by_key->sort_status !OK\n");
