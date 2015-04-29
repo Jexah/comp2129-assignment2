@@ -1487,6 +1487,7 @@ void pop_command(command_struct *command, entry *entry_head)
 	switch(print_and_delete_value_status)
 	{
 		case OK:
+			printf("\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
