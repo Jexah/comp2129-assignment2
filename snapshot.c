@@ -1709,7 +1709,19 @@ void checkout_command(command_struct *command, snapshot *snapshot_head, entry *e
 
 void rollback_command(command_struct *command, snapshot *snapshot_head, entry *entry_head)
 {
-	rollback_to_snapshot_id(atoi(command->args_malloc_ptr[1]), snapshot_head, entry_head);
+	STATUS rollback_snapshot_status = rollback_to_snapshot_id(atoi(command->args_malloc_ptr[1]), snapshot_head, entry_head);
+	switch(rollback_snapshot_status)
+	{
+		case OK:
+			printf("ok\n");
+			break;
+		case NO_SNAPSHOT:
+			printf("no such snapshot\n");
+			break;
+		default:
+			printf("Whoops! (rollback_snapshot_status: %d)", rollback_snapshot_status);
+			break;
+	}
 }
 
 // //////////////////////////////////////////////////////////////
