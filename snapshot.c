@@ -1632,7 +1632,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "drop") == 0)
 		{
-
+			drop_command(command, snapshot_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "rollback") == 0)
 		{
