@@ -277,20 +277,41 @@ STATUS append_entry_values_by_key(char *key, char *values, entry *entry_head)
 	return OK;
 }
 
+STATUS get_new_entry(char *key, entry **new_entry_ptr)
+{
+	*new_entry_ptr = calloc(sizeof(entry), 1);
+	value *entry_ptr_values_head = calloc(sizeof(value), 1);
+	strncpy(new_entry_ptr->key, key, MAX_KEY_LENGTH);
+}
+
+STATUS get_new_entry_with_values(char *key, entry **new_entry_ptr)
+{
+	STATUS get_new_entry_status = get_new_entry(key, &entry_ptr);
+	if(get_new_entry_status != OK)
+	{
+		DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
+		return get_new_entry_status;
+	}
+	STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
+	if(append_entry_status != OK)
+	{
+		DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
+		return append_entry_status;
+	}
+	DEBUG("create_entry_if_not_exist-> OK\n");
+	return OK;
+}
+
 STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 {
 	entry *entry_ptr = find_entry_by_key(key, entry_head);
 	if(!entry_ptr)
 	{
-		entry_ptr = calloc(sizeof(entry), 1);
-		value *entry_ptr_values_head = calloc(sizeof(value), 1);
-		entry_ptr->values = entry_ptr_values_head;
-		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
-		STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
-		if(append_entry_status != OK)
+		STATUS get_new_entry_status = get_new_entry_with_values(key, entry_ptr);
+		if(get_new_entry_status != OK)
 		{
-			DEBUG("create_entry_if_not_exist->append_entry_status !OK\n");
-			return append_entry_status;
+			DEBUG("create_entry_if_not_exist->get_new_entry_status !OK\n");
+			return get_new_entry_status;
 		}
 	}
 	DEBUG("create_entry_if_not_exist-> OK\n");
@@ -356,7 +377,7 @@ STATUS purge_entry(char *key, entry *entry_head, snapshot *snapshot_head)
 	return OK;
 }
 
-STATUS push_int_on_entry(int number, entry *entry)
+STATUS push_int_on_entry(int number, entry *target_entry)
 {
 	value *new_value;
 	STATUS get_new_value_status = get_new_value(number, &new_value);
@@ -365,13 +386,13 @@ STATUS push_int_on_entry(int number, entry *entry)
 		DEBUG("push_int_on_entry->get_new_value_status !OK\n");
 		return get_new_value_status;
 	}
-	return push_value_on_entry(new_value, entry);
+	return push_value_on_entry(new_value, target_entry);
 }
 
-STATUS push_value_on_entry(value *new_value, entry *entry)
+STATUS push_value_on_entry(value *new_value, entry *target_entry)
 {
-	value *new_second = entry->values->next;
-	entry->values->next = new_value;
+	value *new_second = target_entry->values->next;
+	target_entry->values->next = new_value;
 	new_value->next = new_second;
 	if(new_second)
 	{
@@ -404,9 +425,9 @@ STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 	return OK;
 }
 
-value *get_value_from_entry_by_index(int index, entry *entry)
+value *get_value_from_entry_by_index(int index, entry *target_entry)
 {
-	value *cursor = entry->values;
+	value *cursor = target_entry->values;
 	for(int i = 0; i < index; ++i)
 	{
 		if(!cursor->next)
@@ -793,6 +814,31 @@ STATUS sort_values_by_key(char *key, entry *entry_head)
 		return sort_status;
 	}
 	return OK;
+}
+
+STATUS push_entry_on_snapshot(entry *new_entry, snapshot *target_snapshot)
+{
+	entry *new_second = target_snapshot->entries->next;
+	target_snapshot->values->next = new_entry;
+	new_entry->next = new_second;
+	if(new_second)
+	{
+		new_second->prev = new_entry;
+	}
+	DEBUG("push_entry_on_snapshot-> OK\n");
+	return OK;
+}
+
+STATUS push_key_on_snapshot(char *key, snapshot *target_snapshot)
+{
+	entry *new_entry;
+	STATUS get_new_entry_status = get_new_entry_with_values(key, &new_entry);
+	if(get_new_value_status != OK)
+	{
+		DEBUG("push_key_on_snapshot->get_new_value_status !OK\n");
+		return get_new_value_status;
+	}
+	return push_entry_on_snapshot(new_entry, target_snapshot);
 }
 
 // //////////////////////////////////////////////////////////////
@@ -1388,6 +1434,8 @@ int main(void) {
 	entry* entry_head = calloc(sizeof(entry), 1);
 	snapshot* snapshot_head = calloc(sizeof(snapshot), 1);
 
+	int latest_snapshotID = 1;
+
 	char buffer[MAX_LINE_LENGTH];
 
 	printf("> ");
@@ -1461,7 +1509,38 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
+			snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
+			new_snapshot->entries = calloc(sizeof(entry), 1);
+			new_snapshot->id = latest_snapshotID++;
 
+			snapshot *snapshot_new_second = snapshot_head->next;
+
+
+			entry *entry_cursor = entry_head->next;
+			while(entry_cursor)
+			{
+				STATUS get_new_entry_status = push_key_on_snapshot(entry_cursor->key, new_snapshot);
+				if(get_new_entry_status != OK)
+				{
+					DEBUG("snapshot->get_new_entry_status !OK\n");
+					return get_new_entry_status;
+				}
+				value *value_cursor = entry_cursor->values->next;
+				while(value_cursor)
+				{
+					entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key);
+					STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
+					if(get_new_value_status != OK)
+					{
+						DEBUG("snapshot->get_new_value_status !OK\n");
+						return get_new_value_status;
+					}
+					value_cursor = value_cursor->next;
+				}
+				entry_cursor = entry_cursor->next;
+			}
+			DEBUG("snapshot-> OK\n");
+			return OK;
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
