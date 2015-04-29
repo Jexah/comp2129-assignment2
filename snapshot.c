@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "snapshot.h"
 
-#define TESTING 1
+#define TESTING 0
 #if TESTING
 #define DEBUG(str)(printf("%s", str))
 #else
@@ -456,17 +456,18 @@ STATUS push_ints_on_entry_by_key(char *key, char *values, entry *entry_head)
 
 value *get_value_from_entry_by_index(int index, entry *target_entry)
 {
-	value *cursor = target_entry->values;
-	for(int i = 0; i < index; ++i)
+	value *cursor = target_entry->values->next;
+	int current = 1;
+	while(cursor)
 	{
-		if(!cursor->next)
+		if(index == current)
 		{
-			DEBUG("get_value_from_entry_by_index-> !cursor->next, INDEX_OUT_OF_RANGE\n");
-			return 0;
+			return cursor;
 		}
 		cursor = cursor->next;
 	}
-	return cursor;
+		DEBUG("get_value_from_entry_by_index-> !cursor->next, INDEX_OUT_OF_RANGE\n");
+	return 0;
 }
 
 STATUS print_value_index_by_entry(int index, entry *target_entry)
@@ -725,7 +726,6 @@ STATUS print_len_of_values_by_key(char *key, entry *entry_head)
 
 STATUS rev_values_by_entry(entry *target_entry)
 {
-	int total = 0;
 	value *cursor = target_entry->values->next;
 	while(cursor)
 	{
@@ -1180,7 +1180,7 @@ void print_help_string(void)
 		"\n"\
 		"LIST KEYS displays all keys in current state\n"\
 		"LIST ENTRIES displays all entries in current state\n"\
-		"LIST SNAPSHOTS displays all snapshot ids\n"\
+		"LIST SNAPSHOTS displays all snapshots in the database\n"\
 		"\n"\
 		"GET <key> displays entry values\n"\
 		"DEL <key> deletes entry from current state\n"\
