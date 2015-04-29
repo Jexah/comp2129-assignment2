@@ -75,6 +75,14 @@ STATUS print_and_remove_index_by_entry(int, entry *);
 STATUS print_and_remove_index_by_key(int, char *, entry *);
 STATUS delete_value_index_by_entry(int, entry *);
 STATUS delete_value_index_by_key(int, char *, entry *);
+STATUS print_minimum_value_by_entry(entry *);
+STATUS print_minimum_value_by_key(char *, entry *);
+STATUS print_maximum_value_by_entry(entry *);
+STATUS print_maximum_value_by_key(char *, entry *);
+STATUS print_sum_of_values_by_entry(entry *);
+STATUS print_sum_of_values_by_key(char *, entry *);
+STATUS print_len_of_values_by_entry(entry *);
+STATUS print_len_of_values_by_key(char *, entry *);
 
 // Options
 void get_command(command_struct *, entry *);
@@ -85,5 +93,13 @@ STATUS list_command_entries(entry *);
 STATUS list_command_snapshots(snapshot *);
 void list_command(command_struct *, entry *, snapshot *);
 void set_command(command_struct *, entry *);
+void push_command(command_struct *, entry *);
+void append_command(command_struct *, entry *);
+void pick_command(command_struct *, entry *);
+void pluck_command(command_struct *, entry *);
+void pop_command(command_struct *, entry *);
+void min_command(command_struct *, entry *);
+void max_command(command_struct *, entry *);
+void len_command(command_struct *, entry *);
 
 #endif

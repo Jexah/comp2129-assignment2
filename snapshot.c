@@ -652,6 +652,42 @@ STATUS print_len_of_values_by_key(char *key, entry *entry_head)
 	return OK;
 }
 
+STATUS rev_values_by_entry(entry *target_entry)
+{
+	int total = 0;
+	value *cursor = target_entry->values->next;
+	while(cursor)
+	{
+		value *next = cursor->next;
+		cursor->next = cursor->prev;
+		cursor->prev = next;
+		cursor = next;
+		if(!cursor->next)
+		{
+			target_entry->values = cursor;
+		}
+	}
+	DEBUG("rev_values_by_entry-> OK\n");
+	return OK;
+}
+
+STATUS rev_values_by_key(char *key, entry *entry_head)
+{
+	entry *found = find_entry_by_key(key, entry_head);
+	if(!found)
+	{
+		DEBUG("rev_values_by_key-> !found\n");
+		return NO_KEY;
+	}
+	STATUS rev_status = rev_values_by_entry(found);
+	if(rev_status != OK)
+	{
+		DEBUG("rev_values_by_key->rev_status !OK\n");
+		return rev_status;
+	}
+	return OK;
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1170,6 +1206,28 @@ void len_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void rev_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS rev_status = rev_values_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(rev_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		default:
+			printf("Whoops! (rev_command: %d)", rev_status);
+			break;
+	}
+}
+
+
 
 
 // //////////////////////////////////////////////////////////////
@@ -1274,7 +1332,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "rev") == 0)
 		{
-
+			rev_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "uniq") == 0)
 		{
@@ -1287,6 +1345,7 @@ int main(void) {
 		printf("\n> ");
 		free_command(command);
 	}
+
 	free_entries_from_head(entry_head);
 
 	return 0;
