@@ -59,6 +59,7 @@ STATUS free_entries_from_head(entry *);
 STATUS append_entry_to_entry_head(entry *, entry *);
 entry *find_entry_by_key(char *, entry *);
 STATUS set_entry_values_by_key(char *, char *, entry *);
+STATUS print_value_by_value(value *);
 void print_values_in_entry(entry *);
 STATUS append_entry_values_by_key(char *, char *, entry *);
 STATUS create_entry_if_not_exist(char *, entry *entry_head);
