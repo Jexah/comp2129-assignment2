@@ -1660,7 +1660,7 @@ void snapshot_command(snapshot *snapshot_head, entry *entry_head, int *latest_sn
 	switch(snapshot_status)
 	{
 		case OK:
-			printf("ok\n");
+			printf("saved as snapshot %d\n", latest_snapshotID);
 			break;
 		default:
 			printf("Whoops! (snapshot_command: %d)", snapshot_status);
