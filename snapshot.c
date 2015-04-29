@@ -1279,7 +1279,7 @@ void uniq_command(command_struct *command, entry *entry_head)
 		return;
 	}
 	STATUS uniq_status = uniq_values_by_key(command->args_malloc_ptr[1], entry_head);
-	switch(rev_status)
+	switch(uniq_status)
 	{
 		case OK:
 			break;
