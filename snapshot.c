@@ -595,7 +595,7 @@ STATUS print_minimum_value_by_entry(entry *target_entry)
 		DEBUG("print_minimum_value_by_entry-> first\n");
 		return INDEX_OUT_OF_RANGE;
 	}
-	printf("%d", lowest);
+	printf("%d\n", lowest);
 	DEBUG("print_minimum_value_by_entry-> OK\n");
 	return OK;
 }
@@ -636,7 +636,7 @@ STATUS print_maximum_value_by_entry(entry *target_entry)
 		DEBUG("print_maximum_value_by_entry-> first\n");
 		return INDEX_OUT_OF_RANGE;
 	}
-	printf("%d", highest);
+	printf("%d\n", highest);
 	DEBUG("print_maximum_value_by_entry-> OK\n");
 	return OK;
 }
@@ -667,7 +667,7 @@ STATUS print_sum_of_values_by_entry(entry *target_entry)
 		total += cursor->value;
 		cursor = cursor->next;
 	}
-	printf("%d", total);
+	printf("%d\n", total);
 	DEBUG("print_sum_of_values_by_entry-> OK\n");
 	return OK;
 }
@@ -703,7 +703,7 @@ int get_len_of_values_by_entry(entry *target_entry)
 
 STATUS print_len_of_values_by_entry(entry *target_entry)
 {
-	printf("%d", get_len_of_values_by_entry(target_entry));
+	printf("%d\n", get_len_of_values_by_entry(target_entry));
 	DEBUG("print_len_of_values_by_entry-> OK\n");
 	return OK;
 }
