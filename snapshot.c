@@ -377,7 +377,7 @@ value *get_value_from_entry_by_index(int index, entry *entry)
 	return cursor;
 }
 
-STATUS print_value_index_from_entry(int index, entry *target_entry)
+STATUS print_value_index_by_entry(int index, entry *target_entry)
 {
 	value *target_value = get_value_from_entry_by_index(index, target_entry);
 	if(!target_value)
