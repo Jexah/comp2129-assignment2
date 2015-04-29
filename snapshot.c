@@ -32,10 +32,6 @@ int compare_values(const void *_value1, const void *_value2)
 	int *value1 = (int *)_value1;
 	int *value2 = (int *)_value2;
 
-	if(*value1 == *value2)
-	{
-		return 0;
-	}
 	if(*value1 > *value2)
 	{
 		return -1;
@@ -44,6 +40,7 @@ int compare_values(const void *_value1, const void *_value2)
 	{
 		return 1;
 	}
+	return 0;
 }
 
 // //////////////////////////////////////////////////////////////
