@@ -665,7 +665,7 @@ STATUS rev_values_by_entry(entry *target_entry)
 
 		if(prev == target_entry->values)
 		{
-			cursor->next = null;
+			cursor->next = 0;
 		}
 		if(!next)
 		{
