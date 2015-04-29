@@ -464,6 +464,7 @@ value *get_value_from_entry_by_index(int index, entry *target_entry)
 		{
 			return cursor;
 		}
+		current++;
 		cursor = cursor->next;
 	}
 		DEBUG("get_value_from_entry_by_index-> !cursor->next, INDEX_OUT_OF_RANGE\n");
