@@ -1425,7 +1425,41 @@ void sort_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void snapshot_command(command_struct *command, snapshot *snapshot_head, entry *entry_head)
+{
+	snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
+	new_snapshot->entries = calloc(sizeof(entry), 1);
+	new_snapshot->id = latest_snapshotID++;
 
+	snapshot *snapshot_new_second = snapshot_head->next;
+
+
+	entry *entry_cursor = entry_head->next;
+	while(entry_cursor)
+	{
+		STATUS get_new_entry_status = push_key_on_snapshot(entry_cursor->key, new_snapshot);
+		if(get_new_entry_status != OK)
+		{
+			DEBUG("snapshot->get_new_entry_status !OK\n");
+			return get_new_entry_status;
+		}
+		value *value_cursor = entry_cursor->values->next;
+		while(value_cursor)
+		{
+			entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key, new_snapshot->entries);
+			STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
+			if(get_new_value_status != OK)
+			{
+				DEBUG("snapshot->get_new_value_status !OK\n");
+				return get_new_value_status;
+			}
+			value_cursor = value_cursor->next;
+		}
+		entry_cursor = entry_cursor->next;
+	}
+	DEBUG("snapshot-> OK\n");
+	return OK;
+}
 
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
@@ -1511,38 +1545,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "snapshot") == 0)
 		{
-			snapshot *new_snapshot = calloc(sizeof(snapshot), 1);
-			new_snapshot->entries = calloc(sizeof(entry), 1);
-			new_snapshot->id = latest_snapshotID++;
-
-			snapshot *snapshot_new_second = snapshot_head->next;
-
-
-			entry *entry_cursor = entry_head->next;
-			while(entry_cursor)
-			{
-				STATUS get_new_entry_status = push_key_on_snapshot(entry_cursor->key, new_snapshot);
-				if(get_new_entry_status != OK)
-				{
-					DEBUG("snapshot->get_new_entry_status !OK\n");
-					return get_new_entry_status;
-				}
-				value *value_cursor = entry_cursor->values->next;
-				while(value_cursor)
-				{
-					entry *current_entry_in_snapshot = find_entry_by_key(entry_cursor->key, new_snapshot->entries);
-					STATUS get_new_value_status = append_int_to_entry(value_cursor->value, current_entry_in_snapshot);
-					if(get_new_value_status != OK)
-					{
-						DEBUG("snapshot->get_new_value_status !OK\n");
-						return get_new_value_status;
-					}
-					value_cursor = value_cursor->next;
-				}
-				entry_cursor = entry_cursor->next;
-			}
-			DEBUG("snapshot-> OK\n");
-			return OK;
+			snapshot_command(command, snapshot_head, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "min") == 0)
 		{
