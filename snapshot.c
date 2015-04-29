@@ -262,7 +262,6 @@ STATUS create_entry_if_not_exist(char *key, entry *entry_head)
 	{
 		entry_ptr = calloc(sizeof(entry), 1);
 		value *entry_ptr_values_head = calloc(sizeof(value), 1);
-		entry_ptr->values = calloc(sizeof(&entry_ptr_values_head), 1);
 		entry_ptr->values = entry_ptr_values_head;
 		strncpy(entry_ptr->key, key, MAX_KEY_LENGTH);
 		STATUS append_entry_status = push_entry_on_entry_head(entry_ptr, entry_head);
