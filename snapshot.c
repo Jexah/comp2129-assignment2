@@ -859,14 +859,28 @@ void pick_command(command_struct *command, entry *entry_head)
 			printf("index out of range\n");
 			break;
 		default:
-			printf("Whoops! (append_command: %d)", print_value_status);
+			printf("Whoops! (pick_command: %d)", print_value_status);
 			break;
 	}
 }
 
 void pluck_command(command_struct *command, entry *entry_head)
 {
-	pick
+	STATUS print_and_delete_value_status = print_and_remove_index_by_key(atoi(command->args_malloc_ptr[2]), command->args_malloc_ptr[1], entry_head);
+	switch(print_and_delete_value_status)
+	{
+		case OK:
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("index out of range\n");
+			break;
+		default:
+			printf("Whoops! (pluck_command: %d)", print_and_delete_value_status);
+			break;
+	}
 }
 
 // //////////////////////////////////////////////////////////////
