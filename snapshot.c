@@ -770,6 +770,7 @@ STATUS sort_values_by_entry(entry *target_entry)
 	cursor = target_entry->values->next;
 	while(cursor)
 	{
+		printf("%d", arr[current]);
 		cursor->value = arr[current];
 		current++;
 		cursor = cursor->next;
@@ -1367,6 +1368,7 @@ void sort_command(command_struct *command, entry *entry_head)
 	switch(sort_status)
 	{
 		case OK:
+			printf("ok\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
