@@ -965,6 +965,17 @@ STATUS delete_all_snapshots(snapshot *snapshot_head)
 	return delete_snapshot_by_snapshot(snapshot_head, snapshot_head);
 }
 
+STATUS free_all(snapshot *snapshot_head, entry *entry_head)
+{
+	STATUS delete_snapshots_status = delete_all_snapshots(snapshot_head);
+	if(delete_snapshots_status != OK)
+	{
+		DEBUG("bye_command->delete_snapshots_status !OK");
+		return delete_snapshots_status;
+	}
+	return free_entries_and_head(entry_head);
+}
+
 // //////////////////////////////////////////////////////////////
 // ////////////////////   Database module    ////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1580,13 +1591,7 @@ void drop_command(command_struct *command, snapshot *snapshot_head)
 
 void bye_command(snapshot *snapshot_head, entry *entry_head)
 {
-	STATUS delete_snapshots_status = delete_all_snapshots(snapshot_head);
-	if(delete_snapshots_status != OK)
-	{
-		DEBUG("bye_command->delete_snapshots_status !OK");
-		return delete_snapshots_status;
-	}
-	return free_entries_and_head(entry_head);
+	free_all(snapshot_head, entry_head);
 }
 
 // //////////////////////////////////////////////////////////////
