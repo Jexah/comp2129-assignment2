@@ -970,9 +970,10 @@ STATUS free_all(snapshot *snapshot_head, entry *entry_head)
 	STATUS delete_snapshots_status = delete_all_snapshots(snapshot_head);
 	if(delete_snapshots_status != OK)
 	{
-		DEBUG("bye_command->delete_snapshots_status !OK");
+		DEBUG("free_all->delete_snapshots_status !OK");
 		return delete_snapshots_status;
 	}
+	DEBUG("free_all->delete_snapshots_status OK");
 	return free_entries_and_head(entry_head);
 }
 
