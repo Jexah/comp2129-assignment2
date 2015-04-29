@@ -1043,6 +1043,31 @@ void min_command(command_struct *command, entry *entry_head)
 	}
 }
 
+void max_command(command_struct *command, entry *entry_head)
+{
+	if(!command->args_malloc_ptr[1])
+	{
+		printf("invalid input\n");
+		return;
+	}
+	STATUS print_max_value_status = print_maximum_value_by_key(command->args_malloc_ptr[1], entry_head);
+	switch(print_max_value_status)
+	{
+		case OK:
+			printf("\n");
+			break;
+		case NO_KEY:
+			printf("no such key\n");
+			break;
+		case INDEX_OUT_OF_RANGE:
+			printf("index out of range\n");
+			break;
+		default:
+			printf("Whoops! (append_command: %d)", print_max_value_status);
+			break;
+	}
+}
+
 // //////////////////////////////////////////////////////////////
 // /////////////////////   Options module   /////////////////////
 // //////////////////////////////////////////////////////////////
@@ -1133,7 +1158,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "max") == 0)
 		{
-
+			max_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "sum") == 0)
 		{
