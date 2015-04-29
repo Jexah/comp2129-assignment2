@@ -834,7 +834,7 @@ STATUS push_entry_on_snapshot(entry *new_entry, snapshot *target_snapshot)
 STATUS push_key_on_snapshot(char *key, snapshot *target_snapshot)
 {
 	entry *new_entry;
-	STATUS get_new_entry_status = get_new_entry_with_values(key, &new_entry);
+	STATUS get_new_entry_status = get_new_entry(key, &new_entry);
 	if(get_new_value_status != OK)
 	{
 		DEBUG("push_key_on_snapshot->get_new_value_status !OK\n");
