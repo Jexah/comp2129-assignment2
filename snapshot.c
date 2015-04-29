@@ -1625,6 +1625,7 @@ int main(void) {
 		if(strcmp(command->args_malloc_ptr[0], "bye") == 0)
 		{
 			bye_command(snapshot_head, entry_head);
+			free_command(command);
 			printf("bye");
 			return 0;
 		}
@@ -1719,8 +1720,6 @@ int main(void) {
 		printf("\n> ");
 		free_command(command);
 	}
-
-	free_entries_from_head(entry_head);
-
+		bye_command(snapshot_head, entry_head);
 	return 0;
 }
