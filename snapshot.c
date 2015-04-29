@@ -174,6 +174,11 @@ STATUS free_entries_from_head(entry *entry_head)
 
 STATUS free_entries_and_head(entry *entry_head)
 {
+	if(!entry_head)
+	{
+		DEBUG("free_entries_and_head-> !entry_head, OK\n");
+		return OK;
+	}
 	STATUS free_entries_status = free_entries_from_head(entry_head);
 	if(free_entries_status != OK)
 	{
@@ -960,6 +965,7 @@ STATUS delete_all_snapshots(snapshot *snapshot_head)
 			DEBUG("delete_all_snapshots->delete_snapshot_status !OK");
 			return delete_snapshot_status;
 		}
+		DEBUG("delete_all_snapshots->delete_snapshot_status OK");
 		cursor = next;
 	}
 	return delete_snapshot_by_snapshot(snapshot_head, snapshot_head);
