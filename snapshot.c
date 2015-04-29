@@ -1029,7 +1029,6 @@ void min_command(command_struct *command, entry *entry_head)
 	switch(print_min_value_status)
 	{
 		case OK:
-			printf("\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
@@ -1054,7 +1053,6 @@ void max_command(command_struct *command, entry *entry_head)
 	switch(print_max_value_status)
 	{
 		case OK:
-			printf("\n");
 			break;
 		case NO_KEY:
 			printf("no such key\n");
