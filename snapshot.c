@@ -1215,7 +1215,7 @@ int main(void) {
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "sum") == 0)
 		{
-
+			sum_command(command, entry_head);
 		}
 		else if(strcmp(command->args_malloc_ptr[0], "len") == 0)
 		{
