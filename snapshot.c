@@ -23,7 +23,7 @@ void str_tolower(char *str)
 	while(*str)
 	{
 		*str = tolower(*str);
-		str++
+		str++;
 	}
 }
 
