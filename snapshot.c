@@ -1023,6 +1023,7 @@ STATUS restore_snapshot_by_snapshot(snapshot *target_snapshot, entry *entry_head
 				DEBUG("restore_snapshot_by_snapshot->append_value_status !OK");
 				return append_value_status;
 			}
+			snapshot_value_cursor = snapshot_value_cursor->next;
 		}
 		snapshot_entry_cursor = snapshot_entry_cursor->next;
 		entry_head_cursor = entry_head_cursor->next;
