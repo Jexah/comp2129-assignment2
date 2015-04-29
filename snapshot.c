@@ -917,23 +917,11 @@ STATUS delete_snapshot_by_snapshot(snapshot *target_snapshot, snapshot *snapshot
 	if(target_snapshot->next) target_snapshot->next->prev = target_snapshot->prev;
 	if(target_snapshot->prev) target_snapshot->prev->next = target_snapshot->next;
 
-	entry *cursor = target_snapshot->entries->next;
-	while(cursor)
+	STATUS free_entries_status = free_entries_and_head(target_snapshot->entries);
+	if(free_entries_status != OK)
 	{
-		entry *next = cursor->next;
-		STATUS free_entries_status = free_entries_and_head(cursor);
-		if(free_entries_status != OK)
-		{
-			DEBUG("delete_snapshot_by_snapshot->free_entries_status !OK\n");
-			return free_entries_status;
-		}
-		cursor = next;
-	}
-	STATUS free_entry_head_status = delete_entry(target_snapshot->entries);
-	if(free_entry_head_status != OK)
-	{
-		DEBUG("delete_snapshot_by_snapshot->free_entry_head_status !OK\n");
-		return free_entry_head_status;
+		DEBUG("delete_snapshot_by_snapshot->free_entries_status !OK\n");
+		return free_entries_status;
 	}
 	free(target_snapshot);
 	return OK;
