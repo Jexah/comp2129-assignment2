@@ -1217,6 +1217,11 @@ void print_help_string(void)
 
 void get_command(command_struct *command, entry *entry_head)
 {
+	if(command->args_malloc_ptr[2])
+	{
+		printf("invalid input\n");
+		return;
+	}
 	entry *found = find_entry_by_key(command->args_malloc_ptr[1], entry_head);
 	if(!found)
 	{
@@ -1403,6 +1408,9 @@ void push_command(command_struct *command, entry *entry_head)
 	{
 		case OK:
 			printf("ok\n");
+			break;
+		case NO_KEY:
+			printf("no such key\n");
 			break;
 		default:
 			printf("Whoops! (push_command: %d)", push_ints_status);
