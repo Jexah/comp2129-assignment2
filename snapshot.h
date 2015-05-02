@@ -14,12 +14,6 @@ typedef enum STATUS { OK, NO_KEY, NO_KEYS, INDEX_OUT_OF_RANGE, NO_ENTRIES, NO_SN
 typedef struct value value;
 typedef struct entry entry;
 typedef struct snapshot snapshot;
-typedef struct element element;
-
-struct element {
-	element* prev;
-	element* next;
-};
 
 struct value {
 	value* prev;
