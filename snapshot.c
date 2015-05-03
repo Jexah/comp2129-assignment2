@@ -90,7 +90,7 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
     return append_value_to_entry(new_value_ptr, entry_ptr);
 }
 
-STATUS delete_value(value *target_value, entry *parent_entry)
+STATUS delete_value(value *target_value)
 {
 	if(parent_entry->values == target_value)
 	{
