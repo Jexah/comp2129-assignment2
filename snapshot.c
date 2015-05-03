@@ -92,10 +92,10 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
 
 STATUS delete_value(value *target_value)
 {
-	if(parent_entry->values == target_value)
+	/*if(parent_entry->values == target_value)
 	{
 		parent_entry->values = target_value->next;
-	}
+	}*/
 	if(target_value->next)
 	{
 		target_value->next->prev = target_value->prev;
