@@ -1298,7 +1298,7 @@ STATUS list_command_entries(entry *entry_head)
 			value *value_cursor = entry_cursor->values->next;
 			while(value_cursor)
 			{
-				printf("%d<-%d->", (value_cursor->prev?value_cursor->prev->value:0), value_cursor->value, (value_cursor->next?value_cursor->next->value:0));
+				printf("%d<-%d->%d", (value_cursor->prev?value_cursor->prev->value:0), value_cursor->value, (value_cursor->next?value_cursor->next->value:0));
 				value_cursor = value_cursor->next;
 				if(value_cursor)
 				{
