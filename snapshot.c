@@ -100,10 +100,12 @@ STATUS delete_value(value *target_value)
 	{
 		target_value->prev->next = target_value->next;
 	}
+	#if TESTING
 	printf("deleted value int: `%d`, ->next='%d', ->prev='%d'", target_value->value,
 		(target_value->next?target_value->next->value:0),
 		(target_value->prev?target_value->prev->value:0)
 	);
+	#endif
 	free(target_value);
 	DEBUG("delete_value-> OK");
 	return OK;
