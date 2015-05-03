@@ -104,7 +104,7 @@ STATUS delete_value(value *target_value, entry *parent_entry)
 	{
 		target_value->prev->next = target_value->next;
 	}
-	DEBUG("deleted value int: `%d`, ->next='%d', ->prev='%d'", target_value->value,
+	printf("deleted value int: `%d`, ->next='%d', ->prev='%d'", target_value->value,
 		(target_value->next?target_value->next->value:0),
 		(target_value->prev?target_value->prev->value:0)
 	);
