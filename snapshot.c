@@ -90,8 +90,12 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
     return append_value_to_entry(new_value_ptr, entry_ptr);
 }
 
-STATUS delete_value(value *target_value)
+STATUS delete_value(value *target_value, entry *parent_entry)
 {
+	if(parent_entry->values == target_value)
+	{
+		parent_entry->values = target_value->next;
+	}
 	if(target_value->next)
 	{
 		target_value->next->prev = target_value->prev;
@@ -100,7 +104,12 @@ STATUS delete_value(value *target_value)
 	{
 		target_value->prev->next = target_value->next;
 	}
+	DEBUG("deleted value int: `%d`, ->next='%d', ->prev='%d'", target_value->value,
+		(target_value->next?target_value->next->value:0),
+		(target_value->prev?target_value->prev->value:0)
+	);
 	free(target_value);
+	DEBUG("delete_value-> OK");
 	return OK;
 }
 
@@ -539,6 +548,7 @@ STATUS print_and_remove_index_by_key(int index, char *key, entry *entry_head)
 		DEBUG("print_value_index_by_key->print_and_remove_index !OK\n");
 		return print_and_remove_index_status;
 	}
+	DEBUG("print_value_index_by_key-> OK\n");
 	return OK;
 }
 
