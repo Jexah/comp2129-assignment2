@@ -92,10 +92,6 @@ STATUS append_int_to_entry(int number, entry *entry_ptr)
 
 STATUS delete_value(value *target_value)
 {
-	/*if(parent_entry->values == target_value)
-	{
-		parent_entry->values = target_value->next;
-	}*/
 	if(target_value->next)
 	{
 		target_value->next->prev = target_value->prev;
@@ -212,7 +208,7 @@ STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 
 STATUS push_entry_on_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
-	entry *new_second = entry_head_ptr->next;
+	entry *new_second = entry_head_ptr->values->next;
 	if(new_second)
 	{
 		new_second->prev = new_entry_ptr;
