@@ -428,6 +428,7 @@ STATUS push_value_on_entry(value *new_value, entry *target_entry)
 	value *new_second = target_entry->values->next;
 	target_entry->values->next = new_value;
 	new_value->next = new_second;
+	new_value->prev = target_entry->values;
 	if(new_second)
 	{
 		new_second->prev = new_value;
