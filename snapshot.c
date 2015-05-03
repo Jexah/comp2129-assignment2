@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "snapshot.h"
 
-#define TESTING 1
+#define TESTING 0
 #if TESTING
 #define DEBUG(str)(printf("%s", str))
 #else
