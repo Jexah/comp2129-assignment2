@@ -1064,10 +1064,11 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 		DEBUG("rollback_to_snapshot_id->restore_snapshot_status !OK, NO_SNAPSHOT\n");
 		return restore_snapshot_status;
 	}
-	int current = snapshot_head->next->id;
+	int current;
 	snapshot *cursor = snapshot_head->next;
 	while(cursor)
 	{
+		current = cursor->id;
 		snapshot *next = cursor->next;
 		if(current == id)
 		{
@@ -1079,7 +1080,6 @@ STATUS rollback_to_snapshot_id(int id, snapshot *snapshot_head, entry *entry_hea
 			DEBUG("rollback_to_snapshot_id->delete_snapshot_status !OK\n");
 			return delete_snapshot_status;
 		}
-		current--;
 		cursor = next;
 	}
 	return UNKNOWN;
