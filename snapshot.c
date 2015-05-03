@@ -208,7 +208,7 @@ STATUS append_entry_to_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 
 STATUS push_entry_on_entry_head(entry *new_entry_ptr, entry *entry_head_ptr)
 {
-	entry *new_second = entry_head_ptr->values->next;
+	entry *new_second = entry_head_ptr->next;
 	if(new_second)
 	{
 		new_second->prev = new_entry_ptr;
@@ -1288,6 +1288,33 @@ STATUS list_command_keys(entry *entry_head)
 
 STATUS list_command_entries(entry *entry_head)
 {
+	#if TESTING
+	if(entry_head->next)
+	{
+		entry *entry_cursor = entry_head->next;
+		while(entry_cursor)
+		{
+			printf("%s [", entry_cursor->key);
+			value *value_cursor = entry_cursor->values->next;
+			while(value_cursor)
+			{
+				printf("%d<-%d->", (value_cursor->prev?value_cursor->prev->value:0), value_cursor->value, (value_cursor->next?value_cursor->next->value:0);
+				value_cursor = value_cursor->next;
+				if(value_cursor)
+				{
+					printf(" ");
+				}
+			}
+			entry_cursor = entry_cursor->next;
+			printf("]\n");
+		}
+	}
+	else
+	{
+		return NO_ENTRIES;
+	}
+	return OK;
+	#else
 	if(entry_head->next)
 	{
 		entry *entry_cursor = entry_head->next;
@@ -1313,6 +1340,7 @@ STATUS list_command_entries(entry *entry_head)
 		return NO_ENTRIES;
 	}
 	return OK;
+	#endif
 }
 
 STATUS list_command_snapshots(snapshot *snapshot_head)
